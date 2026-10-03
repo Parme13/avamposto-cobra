@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Avamposto Cobra V06</title>
+<title>Avamposto Cobra V07</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Rye&display=swap" rel="stylesheet">
@@ -247,6 +247,19 @@
   .lobby .muted{margin:0}
   .pdead .bottom,.pdead [data-id=cross]{opacity:.3}
   .lives{color:#FFD27A;font-size:17px!important;margin-top:2px}
+  /* ===== V07: gioco online ===== */
+  .net b.t{display:block;font-size:18px;margin:0 0 8px}
+  .net .row{margin:0 0 8px}
+  .net label{font-size:17px;display:flex;align-items:center;gap:8px}
+  .net input{font:inherit;font-size:18px;padding:7px 9px;border-radius:4px;border:0;box-shadow:inset 0 0 0 2px var(--line);background:rgba(255,255,255,.55);color:var(--ink);min-width:0}
+  #netName{width:170px}
+  #netCode{width:104px;text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+  .net .btn{font-size:17px;padding:8px 14px}
+  .net ul{list-style:none;margin:0 0 8px;padding:0;font-size:18px;font-weight:700}
+  .net li i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px}
+  #netCodeLbl{font-size:24px;letter-spacing:.14em;color:var(--ink)}
+  #netMsg.bad{color:#9A2C1B}
+  .btn:disabled{opacity:.5;cursor:default}
   .pinv [data-id=vignette]{opacity:.55!important;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 50%,rgba(255,200,80,.6) 100%)}
 </style>
 </head>
@@ -341,7 +354,8 @@
     <p class="muted">Oggetti: segui le colonne di luce colorate (cure, placche, caricatori, colpi speciali). Compaiono a caso e cadono dai robot abbattuti. A fine ondata scegli un potenziamento con 1, 2 o 3.</p>
     <p class="muted">Bonus: robot d'oro (colonna dorata e freccia in alto), taglie, bottiglie, cappelli, rotolacampo (i cespugli secchi che rotolano), doppiette e combo. Colpi in testa e al nucleo caricano la Mira concentrata: tasto F rallenta il tempo. Quando l'occhio di un robot si illumina, sta per sparare.</p>
       <p class="muted">In 2 giocatori arrivano più robot e lo Sceriffo è più resistente. Se un compagno va a terra hai 30 secondi per raggiungerlo: restagli vicino 3 secondi per rialzarlo.</p>
-      <p class="muted">Stelle dello sceriffo (★ sotto i punti): vite di squadra. Si parte con 1 Stella da soli e 2 in coppia; se ne guadagna una abbattendo lo Sceriffo di Ferro o raccogliendo la stella dorata (dall'ondata 3). Quando cadi da solo, o resti a terra troppo a lungo, una Stella ti fa rientrare dopo pochi secondi in un punto sicuro, protetto per 3 secondi. Senza Stelle: da soli la partita finisce, in coppia rientri alla fine dell'ondata.</p>
+      <p class="muted">Stelle dello sceriffo (★ sotto i punti): vite di squadra. Si parte con 1 Stella da soli e 2 in coppia; se ne guadagna una abbattendo lo Sceriffo di Ferro o raccogliendo la stella dorata (dall'ondata 3). Quando cadi da solo, o resti a terra troppo a lungo, una Stella ti fa rientrare dopo pochi secondi in un punto sicuro, protetto per 3 secondi. Senza Stelle: da soli la partita finisce, in squadra rientri alla fine dell'ondata.</p>
+      <p class="muted">Online: un giocatore crea la stanza e passa il codice (o il link di invito) ai compagni, che lo scrivono e premono Entra. La partita la avvia chi ha creato la stanza e il suo dispositivo fa da arbitro: se chiude il gioco, la partita finisce per tutti. Online il menu di pausa non ferma l'azione e il potenziamento di fine ondata lo sceglie chi ha creato la stanza.</p>
     </details>
     <p class="muted" id="bestLine" hidden></p>
     <details class="set" id="settingsBox">
@@ -365,18 +379,34 @@
       <button class="btn ghost" id="recBtn">Record</button>
     </div>
     <div class="lobby desk-only" id="lobby"><p class="muted" id="lobbyMsg"></p></div>
-    <p class="ver">Versione V06</p>
+    <div class="lobby net" id="netBox">
+      <b class="t">Gioco online in cooperativa (da 2 a 4 giocatori)</b>
+      <div class="row"><label>Il tuo nome <input id="netName" maxlength="14" autocomplete="off" placeholder="Pistolero"></label></div>
+      <div class="row" id="netIdle">
+        <button class="btn ghost" id="netCreate">Crea stanza</button>
+        <input id="netCode" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Codice" aria-label="Codice della stanza">
+        <button class="btn ghost" id="netJoin">Entra</button>
+      </div>
+      <div id="netRoom" hidden>
+        <p class="muted" style="margin:0 0 6px">Codice della stanza: <b id="netCodeLbl"></b></p>
+        <ul id="netList"></ul>
+        <div class="row"><button class="btn ghost" id="netCopy">Copia invito</button><button class="btn ghost" id="netLeave">Esci dalla stanza</button></div>
+      </div>
+      <p class="muted" id="netMsg" aria-live="polite"></p>
+    </div>
+    <p class="ver">Versione V07</p>
   </div>
 </div>
 
 <div class="screen" id="pauseScreen" hidden>
   <div class="card" id="pauseCard">
-    <h2>In pausa</h2>
+    <h2 id="pauseTitle">In pausa</h2>
     <p class="muted rot-hint">Ruota il telefono in orizzontale per continuare.</p>
     <p class="muted" id="pauseInfo"></p>
     <div class="row" id="pauseActions">
       <button class="btn" id="resumeBtn">Riprendi</button>
       <button class="btn ghost" id="restartBtn">Ricomincia</button>
+      <button class="btn ghost" id="leaveBtn" hidden>Esci dalla stanza</button>
     </div>
   </div>
 </div>
@@ -395,9 +425,11 @@
     </div>
     <p class="muted" id="teamStats" hidden></p>
     <p class="muted" id="newRecs"></p>
+    <p class="muted" id="netWait" hidden>Partita online: aspetta che chi ha creato la stanza avvii una nuova partita.</p>
     <div class="row">
       <button class="btn" id="againBtn">Riprova</button>
       <button class="btn ghost" id="recBtn2">Record</button>
+      <button class="btn ghost" id="leaveBtn2" hidden>Esci dalla stanza</button>
     </div>
   </div>
 </div>
@@ -948,14 +980,17 @@
   const glassMats = [0x2E6B3A, 0x6B3A1E, 0x3A5E6B].map((c) => new THREE.MeshStandardMaterial({ color: L(c), roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.82 }));
   const bottleBodyGeo = new THREE.CylinderGeometry(0.045, 0.047, 0.22, 12), bottleNeckGeo = new THREE.CylinderGeometry(0.016, 0.034, 0.11, 10);
   let bottlesSet = 0, bottlesHit = 0;
-  function placeBottles() {
+  // list (solo client online): posizioni decise dall'host, [x, y, z, indice del vetro]
+  function placeBottles(list) {
     for (const b of bottles) scene.remove(b.g);
     bottles.length = 0;
-    const spots = bottleSpots.slice().sort(() => Math.random() - 0.5).slice(0, 10);
+    const spots = Array.isArray(list)
+      ? list.slice(0, 10).map((a) => [fin(a && a[0]), fin(a && a[1]), fin(a && a[2]), clamp(fin(a && a[3]) | 0, 0, glassMats.length - 1)])
+      : bottleSpots.slice().sort(() => Math.random() - 0.5).slice(0, 10).map((sp) => [sp[0] + rand(-0.12, 0.12), sp[1], sp[2] + rand(-0.12, 0.12), (Math.random() * glassMats.length) | 0]);
     for (const sp of spots) {
       const g = new THREE.Group();
-      g.position.set(sp[0] + rand(-0.12, 0.12), sp[1], sp[2] + rand(-0.12, 0.12));
-      const mat = glassMats[(Math.random() * glassMats.length) | 0];
+      g.position.set(sp[0], sp[1], sp[2]);
+      const mat = glassMats[sp[3]];
       const b1 = new THREE.Mesh(bottleBodyGeo, mat); b1.position.y = 0.11; b1.castShadow = true;
       const b2 = new THREE.Mesh(bottleNeckGeo, mat); b2.position.y = 0.275;
       g.add(b1, b2);
@@ -965,8 +1000,10 @@
     }
     bottlesSet = bottles.length; bottlesHit = 0;
     refreshShootables();
+    if (net.mode === 'host') netAll({ t: 'bottles', b: bottlesArr() });
   }
-  function shatterBottle(rec, p) {
+  // Parte visiva della rottura (usata anche dai client online)
+  function bottleVisual(rec, p) {
     if (!rec.alive) return;
     rec.alive = false; scene.remove(rec.g);
     for (let i = 0; i < 12; i++) {
@@ -974,7 +1011,13 @@
       scene.add(m);
       fx.push({ m, v: new V3(rand(-2.5, 2.5), rand(1, 4), rand(-2.5, 2.5)), spin: new V3(rand(-10, 10), rand(-10, 10), rand(-10, 10)), life: 2.5, type: 'debris' });
     }
-    sfx.glass(); registerHit(); hitmark('');
+    sfx.glass();
+    refreshShootables();
+  }
+  function shatterBottle(rec, p) {
+    if (!rec.alive) return;
+    bottleVisual(rec, p);
+    registerHit(); hitmark('');
     addScore(15, p, 'hat');
     bottlesHit++;
     if (bottlesHit === bottlesSet) medal('Tiratore scelto: tutte le bottiglie', 150);
@@ -1146,7 +1189,7 @@
     if (perf.low >= 3) {
       perf.low = 0;
       const next = qualityCur === 'alta' ? 'media' : (qualityCur === 'media' ? 'bassa' : null);
-      if (next) { applyQuality(next); perf.grace = 4; toast('Qualità ridotta a ' + QUALITY[next].label + ' per mantenere la fluidità', 2600); }
+      if (next) { applyQuality(next); perf.grace = 4; toast('Qualità ridotta a ' + QUALITY[next].label + ' per mantenere la fluidità', 2600, true); }
     }
   }
 
@@ -1368,8 +1411,12 @@
 
   // Numeri del danno e segnali a schermo
   // Numeri del danno: compaiono nell'HUD di chi ha sparato
+  // V07: stato della rete (modalità: null = locale, 'host' = arbitro, 'client' = ospite)
+  let menuOpen = false;
+  const net = { mode: null, peer: null, host: null, code: '', remotes: [], roster: [], slot: 0, name: '', snapT: 0, stT: 0, lastSnap: 0, warnT: 0, busy: false };
   const pops = [];
   function popup(text, pos, cls) {
+    if (CP && CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'pop', x: String(text), p: [r2(pos.x), r2(pos.y), r2(pos.z)], c: cls || '' }); return; }
     const el = document.createElement('div');
     el.className = 'pop ' + (cls || '');
     el.textContent = text;
@@ -1382,7 +1429,8 @@
     try { return players.filter((p) => !p.remote).map((p) => p.hud); } catch (e) { return [{ toast: $('toast'), banner: $('banner') }]; }
   }
   let toastTimer = 0;
-  function toast(msg, ms) {
+  function toast(msg, ms, localOnly) {
+    if (net.mode === 'host' && !localOnly) netAll({ t: 'toast', m: msg, ms: ms || 1800 });
     const hs = hudsNow();
     for (const h of hs) { h.toast.textContent = msg; h.toast.classList.add('show'); }
     clearTimeout(toastTimer);
@@ -1390,12 +1438,14 @@
   }
   let bannerTimer = 0;
   function banner(html, ms) {
+    if (net.mode === 'host') netAll({ t: 'banner', h: html, ms: ms || 2200 });
     const hs = hudsNow();
     for (const h of hs) { h.banner.innerHTML = html; h.banner.classList.add('show'); }
     clearTimeout(bannerTimer);
     bannerTimer = setTimeout(() => { for (const h of hs) h.banner.classList.remove('show'); }, ms || 2200);
   }
   function hitmark(kind) {
+    if (CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'hm', k: kind || '' }); return; }
     const el = HU.hitmark;
     el.className = ''; void el.offsetWidth;
     el.className = 'show' + (kind ? ' ' + kind : '');
@@ -1464,7 +1514,7 @@
 
   window.addEventListener('keydown', (e) => {
     keys[e.code] = true;
-    if (state !== 'play') return;
+    if (state !== 'play' || menuOpen) return;
     if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
     if (e.code === 'Space' && !e.repeat) inp.jump = true;
     if (e.code === 'KeyR' && !e.repeat) startReload();
@@ -1485,9 +1535,9 @@
     } catch (e) { onLockError(); }
   }
   function onLockError() {
-    if (lockWorked) { toast('Clicca sullo schermo per riprendere la mira'); return; }
+    if (lockWorked) { toast('Clicca sullo schermo per riprendere la mira', 1800, true); return; }
     dragLook = true;
-    toast('Mira: tieni premuto e trascina, clic breve per sparare', 3500);
+    toast('Mira: tieni premuto e trascina, clic breve per sparare', 3500, true);
   }
   document.addEventListener('pointerlockerror', onLockError);
   document.addEventListener('pointerlockchange', () => {
@@ -1614,6 +1664,7 @@
     G.pending = false; G.rounds--; G.cd = 0.2 * up.rate; G.recoil = 1; stats.shots++;
     updateAmmo();
     sfx.shot();
+    if (net.mode === 'host') netAll({ t: 'bang', s: 0 });
     // Vampa e luce
     gun.flash.visible = true; gun.flash.rotation.z = rand(0, 6); G.flashT = 0.045;
     const mp = new V3(); gun.muzzle.getWorldPosition(mp);
@@ -1638,11 +1689,14 @@
     const hits = ray.intersectObjects(shootables, false);
     const tg = dir.y < -1e-4 ? -origin.y / dir.y : Infinity;
     const hit = hits[0];
+    const cli = net.mode === 'client';
+    let exPt = null;
     if (eff.explo > 0) {
       const ip = (hit && hit.distance < tg) ? hit.point : (tg < 400 ? origin.clone().addScaledVector(dir, tg) : null);
-      if (ip) explodeAt(ip);
+      if (ip) { if (cli) exPt = ip.clone(); else explodeAt(ip); }
       eff.explo--; updateEffectsHud();
     }
+    if (cli) { clientShot(hit && hit.distance < tg ? hit : null, tg, origin, dir, exPt); return; }
     if (hit && hit.distance < tg) {
       const ud = hit.object.userData || {};
       if (ud.enemy) { damageEnemy(ud.enemy, hit.object, hit.point, hit.distance, dir); return; }
@@ -1747,6 +1801,7 @@
 
   // ================= Nemici: 4 tipi + boss + robot d'oro =================
   const enemies = [];
+  let enemySeq = 0, pickSeq = 0; // numeri progressivi usati per riconoscere robot e oggetti in rete
   const starShape = new THREE.Shape();
   for (let i = 0; i < 10; i++) {
     const r = i % 2 ? 0.035 : 0.08, a = i / 10 * Math.PI * 2 + Math.PI / 2;
@@ -1809,7 +1864,7 @@
   function makeEnemy(type, w, x, z) {
     const T = TYPES[type], Lk = LOOK[type], s = typeStats(type, w);
     const e = {
-      type, T, s, hp: s.hp, maxHp: s.hp, alive: true, parts: [], yaw: 0, fireCd: rand(1.5, 3), windup: 0, stun: 0, slow: 1, aimPen: 0, flash: 0,
+      id: ++enemySeq, type, T, s, hp: s.hp, maxHp: s.hp, alive: true, parts: [], yaw: 0, fireCd: rand(1.5, 3), windup: 0, stun: 0, slow: 1, aimPen: 0, flash: 0,
       walk: rand(0, 6), strafe: Math.random() < 0.5 ? 1 : -1, strafeT: rand(1, 3), losT: rand(0, 0.25), los: false, stuckT: 0,
       detour: null, detourT: 0, lastPos: new V3(x, 0, z), dieT: 0, hatOff: false,
       armor: { L: 3, R: 3, CL: 2, CR: 2, B: Infinity }, pref: rand(T.pref[0], T.pref[1]),
@@ -1964,6 +2019,7 @@
     let s = text;
     if (pts > 0) s += ' +' + addScore(pts);
     const p = CP;
+    if (p.remote) { if (p.conn) netSend(p.conn, { t: 'medal', s }); return; }
     p.mq.push(s);
     if (p.mq.length > 4) p.mq.shift();
     if (!p.mbusy) nextMedal(p);
@@ -1985,16 +2041,9 @@
     registerHit();
     if (zone === 'hat') {
       if (!e.hatOff) {
-        e.hatOff = true;
-        e.hat.children.forEach((c) => { c.userData.active = false; });
-        const wp = new V3(), wq = new THREE.Quaternion();
-        e.hat.getWorldPosition(wp); e.hat.getWorldQuaternion(wq);
-        const ws = e.scale;
-        e.hat.parent.remove(e.hat); e.hat.position.copy(wp); e.hat.quaternion.copy(wq); e.hat.scale.setScalar(ws); scene.add(e.hat);
-        fx.push({ m: e.hat, v: new V3(dir.x * 3, 4.5, dir.z * 3), spin: new V3(rand(-6, 6), rand(-12, 12), rand(-6, 6)), life: 15, type: 'debris' });
+        knockHat(e, dir);
         medal('Cappello!', 25);
         sfx.ping(); hitmark('crit');
-        refreshShootables();
       }
       return;
     }
@@ -2002,12 +2051,9 @@
       const k = part.userData.pad;
       e.armor[k] -= eff.pierce > 0 ? 2 : 1;
       sparks(point, 8, 6); sfx.clang();
-      if (e.armor[k] <= 0 && part.parent) {
-        part.userData.active = false;
-        if (e.plates) e.plates = e.plates.filter((p) => p !== part);
-        detachPart(part, new V3(dir.x * 3 + rand(-1, 1), 3, dir.z * 3 + rand(-1, 1)));
+      if (e.armor[k] <= 0 && part.userData.active !== false) {
+        breakPad(e, part, dir);
         popup(k === 'CL' || k === 'CR' ? 'Nucleo esposto' : 'Corazza rotta', point, 'armor');
-        refreshShootables();
       }
     }
     let dmg = BASE_DMG * up.dmg * zoneMult(zone) * (eff.pierce > 0 ? 1.4 : 1) * (dist > 35 ? 0.9 : 1) * rand(0.95, 1.05);
@@ -2030,13 +2076,39 @@
     else hitmark(crit ? 'crit' : '');
   }
 
+  // Parti visive condivise tra partita locale e client online
+  function knockHat(e, dir) {
+    e.hatOff = true;
+    e.hat.children.forEach((c) => { c.userData.active = false; });
+    const wp = new V3(), wq = new THREE.Quaternion();
+    e.hat.getWorldPosition(wp); e.hat.getWorldQuaternion(wq);
+    const ws = e.scale;
+    e.hat.parent.remove(e.hat); e.hat.position.copy(wp); e.hat.quaternion.copy(wq); e.hat.scale.setScalar(ws); scene.add(e.hat);
+    fx.push({ m: e.hat, v: new V3(dir.x * 3, 4.5, dir.z * 3), spin: new V3(rand(-6, 6), rand(-12, 12), rand(-6, 6)), life: 15, type: 'debris' });
+    refreshShootables();
+  }
+  function breakPad(e, part, dir) {
+    part.userData.active = false;
+    if (e.plates) e.plates = e.plates.filter((p) => p !== part);
+    detachPart(part, new V3(dir.x * 3 + rand(-1, 1), 3, dir.z * 3 + rand(-1, 1)));
+    refreshShootables();
+  }
+  function deathFx(e, cp, vol) {
+    const big = e.T.boss ? 3 : 1;
+    sparks(cp, 22 * big, 9); puff(cp, L(0x3A342E), 0.8 * big, 1.6, 1.2, 5);
+    boomLight.position.copy(cp); boomLight.intensity = 9 * big; boomT = 0.25 * big;
+    sfx.boom(vol || 1);
+    e.mats.mEye.emissiveIntensity = 0; e.mats.mCore.emissiveIntensity = 0.2;
+  }
+
   let boomT = 0;
   function killEnemy(e, zone, dir, dist) {
     e.alive = false; e.dieT = 0; e.vy = 0;
     e.fallDir = Math.sign(-(dir.x * Math.sin(e.yaw) + dir.z * Math.cos(e.yaw))) || 1;
+    if (net.mode === 'host') netAll({ t: 'kill', id: e.id, fd: e.fallDir });
     stats.kills++;
     if (e.T.boss) stats.bossKills++;
-    buzz(25);
+    if (!CP.remote) buzz(25);
     onKillExtras(e);
     const cp = new V3(); e.torso.getWorldPosition(cp); if (!e.T.fly) cp.y += 0.3 * e.scale;
     addScore(e.T.score + 5 * wave, cp);
@@ -2049,11 +2121,7 @@
     if (stats.multi === 2) medal('Doppietta', 100);
     else if (stats.multi === 3) medal('Tripletta', 200);
     else if (stats.multi >= 4) medal('Strage di ferraglia', 350);
-    const big = e.T.boss ? 3 : 1;
-    sparks(cp, 22 * big, 9); puff(cp, L(0x3A342E), 0.8 * big, 1.6, 1.2, 5);
-    boomLight.position.copy(cp); boomLight.intensity = 9 * big; boomT = 0.25 * big;
-    sfx.boom(1);
-    e.mats.mEye.emissiveIntensity = 0; e.mats.mCore.emissiveIntensity = 0.2;
+    deathFx(e, cp, 1);
     if (e.T.boss) {
       banner('Sceriffo di Ferro abbattuto<small>La città respira, per ora</small>', 3200);
       $('bossBox').hidden = true;
@@ -2109,6 +2177,7 @@
     m.position.copy(p); m.lookAt(p.clone().add(dir));
     scene.add(m);
     bolts.push({ m, v: dir.clone().multiplyScalar(speed), dmg, life: 4 });
+    if (net.mode === 'host') netAll({ t: 'bolt', p: [r2(p.x), r2(p.y), r2(p.z)], v: [r2(dir.x * speed), r2(dir.y * speed), r2(dir.z * speed)], s: size });
   }
 
   function animateHumanoid(e, dt, moving, dist) {
@@ -2310,17 +2379,23 @@
     if (!spawnQueue.length && hostileAlive() === 0) {
       inIntermission = true; interT = 10;
       // Fine ondata: chi è a terra o eliminato rientra accanto a un compagno
-      const alive = localPlayers().find((p) => !p.pl.dead && !p.pl.down);
-      forPlayers(() => {
+      const alive = players.find((p) => !p.pl.dead && !p.pl.down);
+      let refund = 0;
+      forPlayers((p) => {
         if (pl.dead || pl.down) {
+          if (pl.dead && pl.respawnT > 0) refund++; // Stella spesa ma rientro non ancora avvenuto: viene restituita
           pl.dead = false; pl.down = false; pl.reviveT = 0; pl.helper = null; pl.health = pl.maxHp * 0.5; pl.lastHurt = 0; pl.respawnT = 0; pl.inv = 2;
-          if (alive) pl.pos.set(alive.pl.pos.x + 1.2, alive.pl.pos.y, alive.pl.pos.z);
+          if (alive) { pl.pos.set(alive.pl.pos.x + 1.2, alive.pl.pos.y, alive.pl.pos.z + (p.idx - 1) * 0.7); warp(p); }
         } else pl.health = Math.min(pl.maxHp, pl.health + 30);
         updateHealth();
         medal('Ondata superata', 50 * wave);
         if (waveDamage === 0) medal('Ondata perfetta, nessun graffio', 200);
       });
       banner('Ondata superata<small>Salute recuperata, ricarica e prepara la mira</small>', 3000);
+      if (refund) {
+        lives = Math.min(MAX_LIVES, lives + refund); updateLives();
+        toast(refund === 1 ? 'Stella restituita: ondata finita prima del rientro' : refund + ' Stelle restituite: ondata finita prima del rientro', 2800);
+      }
       offerUpgrades();
     }
   }
@@ -2386,12 +2461,15 @@
     const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: L(c).multiplyScalar(2.5) })); ring.rotation.x = Math.PI / 2; ring.position.y = 0.05; g.add(ring);
     const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: L(c), transparent: true, opacity: 0.22, depthWrite: false, fog: false })); beam.position.y = 3.5; g.add(beam);
     scene.add(g);
-    pickups.push({ type, g, icon, life: 22, t: rand(0, 6) });
+    const rec = { id: ++pickSeq, type, g, icon, life: 22, t: rand(0, 6) };
+    pickups.push(rec);
+    return rec;
   }
+  function giveLoader() { G.rounds = 6; if (G.state === 'reload') { G.state = 'idle'; G.stage = ''; } G.cd = 0; updateAmmo(); sfx.close(); }
   function applyPickup(type, pos) {
     const D = 20 * up.dur;
     if (type === 'medkit') { pl.health = Math.min(pl.maxHp, pl.health + 40); updateHealth(); }
-    else if (type === 'loader') { G.rounds = 6; if (G.state === 'reload') { G.state = 'idle'; G.stage = ''; } G.cd = 0; updateAmmo(); sfx.close(); }
+    else if (type === 'loader') { if (CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'loader' }); } else giveLoader(); }
     else if (type === 'shield') { pl.shield = 50; updateHealth(); }
     else if (type === 'pierce') eff.pierce = D;
     else if (type === 'explo') eff.explo = 6;
@@ -2399,13 +2477,17 @@
     else if (type === 'focus') { focus = 100; updateFocusHud(); }
     else if (type === 'star') { lives = Math.min(MAX_LIVES, lives + 1); updateLives(); }
     medal(PICK[type].name, type === 'coin' ? 100 : 0);
-    sfx.pickup();
+    if (!CP.remote) sfx.pickup();
     updateEffectsHud();
   }
-  function explodeAt(p) {
+  function boomFx(p) {
     sparks(p, 26, 10); puff(p, L(0x4A3C30), 1.1, 1.4, 1.2, 5);
     boomLight.position.copy(p); boomLight.intensity = 10; boomT = 0.3;
     sfx.boom(0.7);
+  }
+  function explodeAt(p) {
+    boomFx(p);
+    if (net.mode === 'host') netAll({ t: 'boom', p: [r2(p.x), r2(p.y), r2(p.z)] });
     const v = new V3();
     for (const e of enemies) {
       if (!e.alive || e.T.golden) continue;
@@ -2431,8 +2513,9 @@
   }
   function activateFocus() {
     if (focus < 100 || focusT > 0 || state !== 'play') return;
+    if (net.mode === 'client') { netSend(net.host, { t: 'focus' }); return; } // online la attiva l'host per tutta la squadra
     focus = 0; focusT = 5;
-    canvas.style.filter = 'saturate(0.35) contrast(1.15) brightness(1.05)';
+    canvas.style.filter = FOCUS_FILTER;
     sfx.focus();
     updateFocusHud();
   }
@@ -2452,25 +2535,28 @@
     if (ev === 'bounty' && !cands.length) ev = 'supply';
     if (ev === 'storm') { stormT = 20; banner('Tempesta di sabbia<small>Visibilità ridotta, punti x1,5 per 20 secondi</small>', 2800); }
     else if (ev === 'supply') {
-      const ns = 3 + 2 * (localPlayers().length - 1);
+      const ns = 3 + 2 * (players.length - 1);
       for (let i = 0; i < ns; i++) spawnPickup();
       banner('Rifornimenti!<small>' + ns + ' oggetti comparsi nell\'avamposto: segui le colonne di luce</small>', 2800);
     }
     else {
       bounty = cands[(Math.random() * cands.length) | 0]; bountyT = 25;
-      const mk = new THREE.Group();
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.05, 6, 24), new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 0.8, 0.2) }));
-      ring.rotation.x = Math.PI / 2; mk.add(ring);
-      const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: L(0xFF5A2A), transparent: true, opacity: 0.3, depthWrite: false, fog: false }));
-      beam.position.y = 3.6; mk.add(beam);
-      mk.position.y = bounty.T.fly ? bounty.alt + 0.7 : 2.35;
-      bounty.root.add(mk); bounty.marker = mk;
+      addBountyMarker(bounty);
       banner('Taglia!<small>Abbatti il robot segnato entro 25 secondi: +250 e 2 oggetti</small>', 2800);
     }
     sfx.bell();
   }
+  function addBountyMarker(e) {
+    const mk = new THREE.Group();
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.05, 6, 24), new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 0.8, 0.2) }));
+    ring.rotation.x = Math.PI / 2; mk.add(ring);
+    const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: L(0xFF5A2A), transparent: true, opacity: 0.3, depthWrite: false, fog: false }));
+    beam.position.y = 3.6; mk.add(beam);
+    mk.position.y = e.T.fly ? e.body.position.y + 0.7 : 2.35;
+    e.root.add(mk); e.marker = mk;
+  }
   function clearBounty() {
-    if (bounty && bounty.marker && bounty.marker.parent) bounty.marker.parent.remove(bounty.marker);
+    if (bounty && bounty.marker) { if (bounty.marker.parent) bounty.marker.parent.remove(bounty.marker); bounty.marker = null; }
     bounty = null;
   }
   function onKillExtras(e) {
@@ -2509,12 +2595,14 @@
       box.appendChild(b);
     });
     $('upgrades').hidden = false;
+    if (net.mode === 'host') netAll({ t: 'toast', m: 'Chi ha creato la stanza sceglie il potenziamento di squadra', ms: 3500 });
   }
   function chooseUpgrade(i) {
     if (!upgradeChoices || !upgradeChoices[i]) return;
     const u = upgradeChoices[i];
     u.apply(); up.level[u.id] = (up.level[u.id] || 0) + 1;
     upgradeChoices = null; $('upgrades').hidden = true;
+    if (net.mode === 'host') netAll({ t: 'up', v: upArr(), n: u.name });
     medal(u.name, 0);
   }
   function autoPickUpgrade() { if (upgradeChoices) chooseUpgrade((Math.random() * upgradeChoices.length) | 0); }
@@ -2553,7 +2641,7 @@
 
   function updateExtras(dt) {
     // Comparsa casuale di oggetti (il massimo cresce con i giocatori)
-    const S = SC(), np = localPlayers().length;
+    const S = SC(), np = players.length;
     pickupT -= dt;
     if (pickupT <= 0) { pickupT = rand(10, 18) / S.drop; if (pickups.length < 5 + 2 * (np - 1)) spawnPickup(); }
     for (let i = pickups.length - 1; i >= 0; i--) {
@@ -2563,14 +2651,13 @@
       p.g.visible = p.life > 5 || Math.sin(p.t * 18) > 0;
       let taker = null;
       for (const P of players) {
-        if (P.remote || P.pl.down || P.pl.dead) continue;
+        if (P.pl.down || P.pl.dead) continue;
         if (Math.hypot(p.g.position.x - P.pl.pos.x, p.g.position.z - P.pl.pos.z) < 1.3 && Math.abs(p.g.position.y - P.pl.pos.y) < 1.6) { taker = P; break; }
       }
       if (taker) { const was = CP; usePlayer(taker); applyPickup(p.type, p.g.position); usePlayer(was); scene.remove(p.g); pickups.splice(i, 1); continue; }
       if (p.life <= 0) { scene.remove(p.g); pickups.splice(i, 1); }
     }
     for (const P of players) {
-      if (P.remote) continue;
       if (P.eff.pierce > 0) P.eff.pierce -= dt;
       if (P.eff.boots > 0) P.eff.boots -= dt;
     }
@@ -2582,12 +2669,15 @@
       if (bounty.marker) bounty.marker.rotation.y += dt * 3;
       if (!bounty.alive || bountyT <= 0) { if (bounty.alive) toast('Taglia scaduta'); clearBounty(); }
     }
-    // Tracciamento del robot d'oro, separato per ogni giocatore
+    updateTrackers(dt);
+  }
+  // Tracciamento del robot d'oro ed effetti attivi, per ogni giocatore su questo schermo
+  function updateTrackers(dt) {
     const gd = enemies.find((e) => e.alive && e.T.golden);
     hudT -= dt;
     const hudTick = hudT <= 0;
     if (hudTick) hudT = 0.25;
-    forPlayers(() => {
+    forLocal(() => {
       const gt = HU.goldTrack;
       if (gd && !pl.dead) {
         const dx = gd.root.position.x - pl.pos.x, dz = gd.root.position.z - pl.pos.z;
@@ -2626,6 +2716,13 @@
     waveDamage += dmg; pl.lastHurt = 0;
     if (pl.shield > 0) { const a = Math.min(pl.shield, dmg); pl.shield -= a; dmg -= a; }
     pl.health -= dmg;
+    if (CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'hurt', f: [r2(from.x), r2(from.z)] }); }
+    else hurtFx(from);
+    updateHealth();
+    if (pl.health <= 0) playerDown();
+  }
+  // Segnali del colpo subito: vibrazione, bordo rosso, direzione e suono
+  function hurtFx(from) {
     buzz(45);
     pl.vig = Math.min(1, pl.vig + 0.5); pl.shake = 0.25;
     const dx = from.x - pl.pos.x, dz = from.z - pl.pos.z;
@@ -2633,8 +2730,6 @@
     HU.dmgDir.style.transform = 'rotate(' + (Math.atan2(rgt, fwd) * 180 / Math.PI).toFixed(0) + 'deg)';
     pl.dmgA = 1;
     sfx.hurt();
-    updateHealth();
-    if (pl.health <= 0) playerDown();
   }
 
   function updateBolts(dt) {
@@ -2648,9 +2743,13 @@
       // Colpo al giocatore (capsula verticale, controllo a metà e fine tratto)
       for (const q of [prev.clone().lerp(p, 0.5), p]) {
         for (const P of players) {
-          if (dead || P.remote || P.pl.down || P.pl.dead) continue;
+          if (dead || P.pl.down || P.pl.dead) continue;
           const pp = P.pl.pos, py = clamp(q.y, pp.y + 0.2, pp.y + EYE);
-          if (Math.hypot(q.x - pp.x, q.z - pp.z, q.y - py) < 0.45) { const was = CP; usePlayer(P); hurtPlayer(b.dmg, prev); usePlayer(was); dead = true; }
+          if (Math.hypot(q.x - pp.x, q.z - pp.z, q.y - py) < 0.45) {
+            // Online il danno lo assegna solo l'host: sui client il proiettile è soltanto visivo
+            if (net.mode !== 'client') { const was = CP; usePlayer(P); hurtPlayer(b.dmg, prev); usePlayer(was); }
+            dead = true;
+          }
         }
       }
       if (!dead && p.y <= 0.02) { puff(p, L(0xD2B081), 0.3, 0.6, 0.4, 2); dead = true; }
@@ -2941,18 +3040,28 @@
 
   // Giocatori: ognuno ha posizione, arma, statistiche, comandi, visuale e HUD propri
   const P0 = {
-    idx: 0, pl, G, gun, camera, stats, eff, inp, hud: HUD0, mq: [], mbusy: false, padIndex: null, remote: false,
+    idx: 0, slot: 0, name: '', tp: 0, conn: null, pl, G, gun, camera, stats, eff, inp, hud: HUD0, mq: [], mbusy: false, padIndex: null, remote: false,
     vp: { x: 0, y: 0, w: window.innerWidth, h: window.innerHeight, top: 0 }, fov0: BASE_FOV, fovAds: ADS_FOV, vk: 1, vxk: 1
   };
   function usePlayer(p) { CP = p; pl = p.pl; G = p.G; gun = p.gun; camera = p.camera; stats = p.stats; eff = p.eff; inp = p.inp; HU = p.hud; }
   usePlayer(P0);
   players = [P0];
   const localPlayers = () => players.filter((p) => !p.remote);
+  // Tutti i giocatori di cui questo dispositivo tiene lo stato (l'host online anche i compagni remoti)
   function forPlayers(fn) {
+    const prev = CP;
+    for (const p of players) { if (p.remote && net.mode !== 'host') continue; usePlayer(p); fn(p); }
+    usePlayer(prev);
+  }
+  // Solo i giocatori su questo schermo
+  function forLocal(fn) {
     const prev = CP;
     for (const p of players) { if (p.remote) continue; usePlayer(p); fn(p); }
     usePlayer(prev);
   }
+  const pname = (p) => p.name || 'Giocatore ' + (p.idx + 1);
+  // Spostamento forzato di un giocatore: online il contatore avvisa il suo dispositivo
+  function warp(p) { p.tp = (p.tp || 0) + 1; p.net = null; p.pl.vel.set(0, 0, 0); }
 
   // Livelli di disegno: arma di ciascuno (1-4) e corpo di ciascuno (5-8) visto solo dagli altri
   function setupLayers(p) {
@@ -2963,9 +3072,11 @@
   }
 
   // Corpo del pistolero visto dai compagni
-  function makeAvatar(i) {
+  // i = indice locale (livello di disegno), slot = colore, label = nome mostrato sopra la testa
+  function makeAvatar(i, slot, label) {
+    if (slot === undefined) slot = i;
     const g = new THREE.Group();
-    const shirt = std({ color: L(PCOL[i]), roughness: 0.85 });
+    const shirt = std({ color: L(PCOL[slot]), roughness: 0.85 });
     const jeans = std({ color: L(0x3B4252), roughness: 0.9 });
     const skin = std({ color: L(0xC98E6A), roughness: 0.7 });
     const hatM = std({ color: L(0x5A3E26), roughness: 0.8 });
@@ -2994,13 +3105,14 @@
     box(0.11, 0.56, 0.12, shirt, 0, -0.28, 0, armR);
     box(0.05, 0.24, 0.06, M.steel, 0, -0.68, 0.02, armR);
     // Etichetta con il numero del giocatore sopra la testa
-    const c = document.createElement('canvas'); c.width = 128; c.height = 48;
+    const wide = !!label;
+    const c = document.createElement('canvas'); c.width = wide ? 256 : 128; c.height = 48;
     const x = c.getContext('2d');
-    x.fillStyle = 'rgba(20,12,6,0.65)'; x.fillRect(0, 0, 128, 48);
-    x.fillStyle = PCSS[i]; x.font = 'bold 32px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.fillText('G' + (i + 1), 64, 26);
+    x.fillStyle = 'rgba(20,12,6,0.65)'; x.fillRect(0, 0, c.width, 48);
+    x.fillStyle = PCSS[slot]; x.font = 'bold ' + (wide ? 28 : 32) + 'px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText(label || 'G' + (i + 1), c.width / 2, 26, c.width - 12);
     const tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: toTex(c, 1, 1), depthTest: false, transparent: true }));
-    tag.scale.set(0.55, 0.2, 1); tag.position.y = 2.15; tag.renderOrder = 5; g.add(tag);
+    tag.scale.set(wide ? 1.1 : 0.55, 0.2, 1); tag.position.y = 2.15; tag.renderOrder = 5; g.add(tag);
     // Anello rosso quando il giocatore è a terra
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.04, 6, 32), new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 0.6, 0.3) }));
     ring.rotation.x = Math.PI / 2; ring.position.y = 0.05; ring.visible = false; g.add(ring);
@@ -3019,7 +3131,7 @@
     const g = buildGun();
     cam.add(g.root); g.root.position.copy(HIP); g.root.visible = false;
     const p = {
-      idx: i, pl: newPl(), G: newG(), gun: g, camera: cam, stats: newStats(), eff: { pierce: 0, explo: 0, boots: 0 },
+      idx: i, slot: i, name: '', tp: 0, conn: null, pl: newPl(), G: newG(), gun: g, camera: cam, stats: newStats(), eff: { pierce: 0, explo: 0, boots: 0 },
       inp: newInput(), hud: makeHudClone(), mq: [], mbusy: false, padIndex: null, remote: false,
       vp: { x: 0, y: 0, w: 1, h: 1, top: 0 }, fov0: BASE_FOV, fovAds: ADS_FOV, vk: 1, vxk: 1
     };
@@ -3077,7 +3189,7 @@
   }
 
   function updateAvatars(t) {
-    const multi = localPlayers().length > 1;
+    const multi = players.length > 1;
     for (const p of players) {
       const a = p.avatar;
       if (!a) continue;
@@ -3149,12 +3261,12 @@
     pl.down = false; pl.dead = true; pl.respawnT = delay; pl.reviveT = 0; pl.helper = null;
     inp.adsToggle = false; inp.adsHeld = false;
     G.state = 'idle'; G.stage = '';
-    const who = localPlayers().length > 1 ? 'Giocatore ' + (CP.idx + 1) + ': u' : 'U';
+    const who = players.length > 1 ? pname(CP) + ': u' : 'U';
     toast(who + 'sata una Stella, rientro tra ' + delay + ' s (restano ' + lives + ')', 2600);
     return true;
   }
   function playerDown() {
-    if (localPlayers().length < 2) {
+    if (players.length < 2) {
       // Da solo: una Stella fa rientrare in gioco, senza Stelle la partita finisce
       pl.health = 0;
       updateHealth();
@@ -3165,13 +3277,13 @@
     inp.adsToggle = false; inp.adsHeld = false;
     G.state = 'idle'; G.stage = '';
     updateHealth();
-    toast('Giocatore ' + (CP.idx + 1) + ' a terra: rialzalo entro ' + DOWN_TIME + ' secondi', 2600);
+    toast(pname(CP) + ' a terra: rialzalo entro ' + DOWN_TIME + ' secondi', 2600);
     checkTeamDown();
   }
   // Squadra tutta a terra: le Stelle disponibili fanno rientrare i giocatori, altrimenti fine partita
   function checkTeamDown() {
     if (state !== 'play') return;
-    const loc = localPlayers();
+    const loc = players;
     if (!loc.every((p) => p.pl.down || p.pl.dead)) return;
     const prev = CP;
     for (const p of loc) { if (p.pl.down && lives > 0) { usePlayer(p); useLife(5); } }
@@ -3182,7 +3294,7 @@
     if (!pl.down) return;
     pl.downT -= dt;
     const me = CP;
-    const helper = localPlayers().find((o) => o !== me && !o.pl.down && !o.pl.dead &&
+    const helper = players.find((o) => o !== me && !o.pl.down && !o.pl.dead &&
       Math.hypot(o.pl.pos.x - pl.pos.x, o.pl.pos.z - pl.pos.z) < 1.8);
     if (helper) { pl.reviveT += dt; pl.helper = helper; }
     else { pl.reviveT = Math.max(0, pl.reviveT - dt * 2); pl.helper = null; }
@@ -3190,7 +3302,7 @@
       pl.down = false; pl.health = 40; pl.lastHurt = 0; pl.reviveT = 0; pl.helper = null;
       updateHealth();
       medal('Di nuovo in piedi!', 0);
-      sfx.pickup();
+      if (!me.remote) sfx.pickup();
       usePlayer(helper); stats.revives++; medal('Compagno rialzato', 100); usePlayer(me);
       return;
     }
@@ -3198,14 +3310,14 @@
       // Tempo scaduto: una Stella fa rientrare dopo 8 s, altrimenti eliminato fino a fine ondata
       if (useLife(8)) return;
       pl.down = false; pl.dead = true; pl.respawnT = 0;
-      toast('Giocatore ' + (me.idx + 1) + ' eliminato: rientra alla prossima ondata', 2600);
+      toast(pname(me) + ' eliminato: rientra alla prossima ondata', 2600);
       checkTeamDown();
     }
   }
   // Punto di rientro sicuro: lontano dai robot e, in coppia, non troppo lontano dai compagni
   function safeSpot() {
     let best = null, bs = -Infinity;
-    const mates = localPlayers().filter((o) => o !== CP && !o.pl.down && !o.pl.dead);
+    const mates = players.filter((o) => o !== CP && !o.pl.down && !o.pl.dead);
     for (let i = 0; i < 24; i++) {
       const c = randomSpot();
       let de = 60;
@@ -3225,21 +3337,22 @@
     pl.dead = false; pl.down = false; pl.respawnT = 0;
     pl.health = Math.round(pl.maxHp * 0.6); pl.lastHurt = 0; pl.inv = 3; pl.vel.set(0, 0, 0);
     pl.pos.set(c.x, groundAt(c.x, c.z, 5), c.z);
+    warp(CP);
     G.rounds = 6; G.state = 'idle'; G.stage = '';
     updateAmmo(); updateHealth();
     medal('Di nuovo in gioco: protetto per 3 s', 0);
-    sfx.bell();
+    if (!CP.remote) sfx.bell();
   }
   function updateStatus() {
     let t = '';
     if (pl.dead) t = pl.respawnT > 0 ? 'Rientri in gioco tra ' + Math.ceil(pl.respawnT) + ' s' : 'Eliminato: rientri alla prossima ondata';
     else if (pl.down) t = pl.helper ? 'Ti stanno rialzando: ' + Math.round(pl.reviveT / 3 * 100) + '%' : 'A terra! Un compagno può rialzarti: ' + Math.ceil(pl.downT) + ' s';
-    else if (localPlayers().length > 1) {
-      for (const o of localPlayers()) {
+    else if (players.length > 1) {
+      for (const o of players) {
         if (o === CP || !o.pl.down) continue;
         const d = Math.hypot(o.pl.pos.x - pl.pos.x, o.pl.pos.z - pl.pos.z);
-        t = d < 1.8 ? 'Rialzo del Giocatore ' + (o.idx + 1) + ': ' + Math.round(o.pl.reviveT / 3 * 100) + '%'
-          : 'Giocatore ' + (o.idx + 1) + ' a terra a ' + Math.round(d) + ' m: raggiungilo (' + Math.ceil(o.pl.downT) + ' s)';
+        t = d < 1.8 ? 'Rialzo di ' + pname(o) + ': ' + Math.round(o.pl.reviveT / 3 * 100) + '%'
+          : pname(o) + ' a terra a ' + Math.round(d) + ' m: raggiungilo (' + Math.ceil(o.pl.downT) + ' s)';
         break;
       }
     }
@@ -3251,7 +3364,7 @@
   }
   function teamStats() {
     const t = newStats();
-    for (const p of localPlayers()) {
+    for (const p of players) {
       for (const k of ['shots', 'hits', 'kills', 'heads', 'score', 'bossKills', 'revives']) t[k] += p.stats[k];
       t.maxCombo = Math.max(t.maxCombo, p.stats.maxCombo);
     }
@@ -3267,6 +3380,17 @@
   }
   function renderLobby() {
     const m = $('lobbyMsg'), b = $('startBtn');
+    b.disabled = net.mode === 'client';
+    if (net.mode === 'host') {
+      m.textContent = 'Stanza online aperta: lo schermo diviso è disattivato.';
+      b.textContent = net.remotes.length ? 'Avvia la partita online in ' + (net.remotes.length + 1) : 'Avvia la partita online';
+      return;
+    }
+    if (net.mode === 'client') {
+      m.textContent = 'Sei ospite di una stanza online: lo schermo diviso è disattivato.';
+      b.textContent = 'In attesa di chi ha creato la stanza';
+      return;
+    }
     if (lobby.p2Pad !== null) {
       m.textContent = 'Giocatore 2 pronto con il controller. Premi B sul controller per uscire.';
       b.textContent = 'Entrate in 2 nell\'avamposto';
@@ -3311,6 +3435,7 @@
         continue;
       }
       if (state !== 'play') continue;
+      if (menuOpen) { if (edge(9) || edge(0)) resume(true); continue; }
       let owner = players.find((p) => !p.remote && p.padIndex === gp.index);
       // Partita da solo: un controller che inizia a essere usato prende il comando del Giocatore 1
       if (!owner && localPlayers().length === 1 && P0.padIndex === null &&
@@ -3351,6 +3476,730 @@
   renderLobby();
   layoutViews();
 
+
+  // ================= V07: cooperativa online da pari a pari (peer-to-peer) =================
+  // Chi crea la stanza (host) esegue la simulazione; gli altri inviano i propri movimenti e colpi.
+  const NET_PREFIX = 'avamposto-cobra-v7-';
+  const PEER_URL = 'https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js';
+  // Facoltativo: server di rilancio aggiuntivi, es. { urls: 'turn:...', username: '...', credential: '...' }
+  const TURN_SERVERS = [];
+  const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const NAME_KEY = 'avamposto-cobra-name';
+  const FOCUS_FILTER = 'saturate(0.35) contrast(1.15) brightness(1.05)';
+  const TYPE_KEYS = Object.keys(TYPES), PICK_KEYS = Object.keys(PICK);
+  const PAD_BITS = [[32, 'L'], [64, 'R'], [128, 'CL'], [256, 'CR']];
+  const STAT_KEYS = ['score', 'combo', 'kills', 'heads', 'shots', 'hits', 'maxCombo', 'bossKills', 'revives'];
+  // Pulizia dei dati in arrivo dalla rete: mai fidarsi di numeri e testi ricevuti
+  const fin = (v, d) => (typeof v === 'number' && isFinite(v) ? v : (d || 0));
+  const r1 = (v) => Math.round(v * 10) / 10, r2 = (v) => Math.round(v * 100) / 100, r3 = (v) => Math.round(v * 1000) / 1000;
+  const v3 = (a) => (Array.isArray(a) ? new V3(fin(a[0]), fin(a[1]), fin(a[2])) : new V3());
+  const cleanName = (s) => String(s == null ? '' : s).replace(/[^\p{L}\p{N} _.\-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 14);
+  const cleanText = (s, n) => String(s == null ? '' : s).replace(/[<>]/g, '').slice(0, n || 160);
+  const cleanCls = (s) => (typeof s === 'string' && /^[a-z]{0,8}$/.test(s) ? s : '');
+
+  function netSend(c, m) { try { if (c && c.open) c.send(m); } catch (e) { /* collegamento chiuso */ } }
+  function netAll(m, except) { for (const p of net.remotes) if (p.conn && p.conn !== except) netSend(p.conn, m); }
+  function upArr() { return [up.dmg, up.reload, up.rate, up.spread, up.dur, up.regen, up.head]; }
+  function applyUp(v) {
+    if (!Array.isArray(v) || v.length < 7) return;
+    up.dmg = clamp(fin(v[0], 1), 0.5, 20); up.reload = clamp(fin(v[1], 1), 0.02, 1); up.rate = clamp(fin(v[2], 1), 0.05, 1);
+    up.spread = clamp(fin(v[3], 1), 0.01, 1); up.dur = clamp(fin(v[4], 1), 1, 50); up.regen = clamp(fin(v[5], 1), 1, 50); up.head = clamp(fin(v[6]), 0, 1);
+  }
+
+  // Giocatore remoto: stesso oggetto dei giocatori locali, ma senza arma né visuale e con un HUD nascosto
+  let dummyHud = null;
+  function makeRemotePlayer(idx, slot, name) {
+    if (!dummyHud) dummyHud = makeHudClone();
+    const p = {
+      idx, slot, name, pl: newPl(), G: newG(), gun: null, camera: P0.camera, stats: newStats(), eff: { pierce: 0, explo: 0, boots: 0 },
+      inp: newInput(), hud: dummyHud, mq: [], mbusy: false, padIndex: null, remote: true, conn: null, tp: 0, net: null, seen: false,
+      vp: P0.vp, fov0: BASE_FOV, fovAds: ADS_FOV, vk: 1, vxk: 1
+    };
+    p.avatar = makeAvatar(idx, slot, name);
+    p.avatar.traverse((o) => o.layers.set(5 + idx));
+    return p;
+  }
+  function rosterList() { return [{ s: 0, n: net.name || 'Host' }].concat(net.remotes.map((p) => ({ s: p.slot, n: p.name }))); }
+  function sendRoster() {
+    net.roster = rosterList();
+    for (const p of net.remotes) netSend(p.conn, { t: 'roster', you: p.slot, pl: net.roster });
+    renderNet();
+  }
+
+  // ---------- Host: ingresso e uscita dei compagni ----------
+  function hostAccept(c) {
+    let p = null;
+    c.on('open', () => {
+      const used = net.remotes.map((o) => o.slot);
+      const slot = [1, 2, 3].find((s) => !used.includes(s));
+      if (!slot) {
+        netSend(c, { t: 'deny', m: 'Stanza piena: massimo 4 giocatori.' });
+        setTimeout(() => { try { c.close(); } catch (e) { /* ignora */ } }, 600);
+        return;
+      }
+      const nm = cleanName(c.metadata && c.metadata.name) || 'Giocatore ' + (slot + 1);
+      p = makeRemotePlayer(slot, slot, nm);
+      p.conn = c;
+      net.remotes.push(p);
+      sendRoster();
+      if (state === 'play') { joinRunning(p); toast(nm + ' è entrato in partita', 2500); }
+    });
+    c.on('data', (m) => {
+      if (!p) return;
+      try { hostMsg(p, m); } catch (e) { console.error('Errore di rete (host):', e); }
+      usePlayer(P0);
+    });
+    c.on('close', () => { if (p) dropRemote(p); });
+    c.on('error', () => { if (p) dropRemote(p); });
+  }
+  function dropRemote(p) {
+    const i = net.remotes.indexOf(p);
+    if (i < 0) return;
+    net.remotes.splice(i, 1);
+    scene.remove(p.avatar);
+    const j = players.indexOf(p);
+    if (j >= 0) players.splice(j, 1);
+    try { p.conn.close(); } catch (e) { /* ignora */ }
+    sendRoster();
+    if (state === 'play') {
+      for (const e of enemies) if (e.tgt === p) e.tgt = null;
+      for (const o of players) if (o.pl.helper === p) o.pl.helper = null;
+      toast(p.name + ' ha lasciato la partita', 2500);
+      usePlayer(P0);
+      checkTeamDown();
+    }
+  }
+  // Compagno che entra a partita iniziata: compare in un punto sicuro, protetto per 3 secondi
+  function joinRunning(p) {
+    players.push(p);
+    usePlayer(p);
+    const c = safeSpot();
+    Object.assign(p.pl, newPl());
+    p.pl.pos.set(c.x, groundAt(c.x, c.z, 5), c.z);
+    p.pl.maxHp = P0.pl.maxHp; p.pl.health = p.pl.maxHp; p.pl.inv = 3;
+    Object.assign(p.stats, newStats());
+    Object.assign(p.eff, { pierce: 0, explo: 0, boots: 0 });
+    warp(p);
+    usePlayer(P0);
+    netSend(p.conn, { t: 'start', you: p.slot, pl: net.roster, up: upArr(), b: bottlesArr(), w: wave });
+  }
+  function bottlesArr() { return bottles.map((b) => [r2(b.g.position.x), r2(b.g.position.y), r2(b.g.position.z), glassMats.indexOf(b.mat)]); }
+
+  // ---------- Host: messaggi dai compagni ----------
+  function hostMsg(p, m) {
+    if (!m || typeof m !== 'object') return;
+    if (m.t === 'st') {
+      if ((m.tp | 0) !== p.tp || !Array.isArray(m.p)) return; // posizione precedente a uno spostamento forzato: scartata
+      p.net = {
+        x: clamp(fin(m.p[0]), -ARENA_R - 1, ARENA_R + 1), y: clamp(fin(m.p[1]), 0, 30), z: clamp(fin(m.p[2]), -ARENA_R - 1, ARENA_R + 1),
+        yaw: fin(m.y), pitch: clamp(fin(m.pi), -1.5, 1.5),
+        vx: clamp(fin(m.v && m.v[0]), -12, 12), vz: clamp(fin(m.v && m.v[1]), -12, 12), g: !!m.g
+      };
+      return;
+    }
+    if (state !== 'play' || !players.includes(p)) return;
+    usePlayer(p);
+    if (m.t === 'shot') hostShot(p, m);
+    else if (m.t === 'focus') activateFocus();
+  }
+  // Colpo sparato da un compagno: il bersaglio lo indica lui, danno e punti li calcola l'host
+  function hostShot(p, m) {
+    if (pl.down || pl.dead) return;
+    stats.shots++;
+    netAll({ t: 'bang', s: p.slot }, p.conn);
+    remoteBang(p);
+    if (Array.isArray(m.ex) && eff.explo > 0) {
+      const ip = v3(m.ex);
+      if (ip.distanceTo(pl.pos) < 420) explodeAt(ip);
+      eff.explo--;
+    }
+    if (m.k === 'hit') {
+      const e = enemies.find((o) => o.id === m.id), part = e && e.parts[m.pi | 0];
+      if (!e || !e.alive || !part || part.userData.active === false) return; // robot già abbattuto: nessuna penalità
+      const wp = new V3(); part.getWorldPosition(wp);
+      const pt = v3(m.pt);
+      if (pt.distanceTo(wp) > 3 * e.scale) pt.copy(wp); // punto incoerente: si usa il centro della parte colpita
+      const dir = pt.clone().sub(new V3(pl.pos.x, pl.pos.y + EYE, pl.pos.z)), dist = dir.length() || 1;
+      dir.multiplyScalar(1 / dist);
+      damageEnemy(e, part, pt, dist, dir);
+    } else if (m.k === 'bottle') {
+      const b = bottles[m.i | 0];
+      if (b && b.alive) shatterBottle(b, b.g.position.clone().add(new V3(0, 0.15, 0)));
+    } else if (m.k === 'tumble') { registerHit(); medal('Rotolacampo!', 40); }
+    else registerMiss();
+  }
+  // Sparo di un altro giocatore: suono attenuato dalla distanza e sbuffo alla canna
+  function remoteBang(p) {
+    if (!p || p === P0) return;
+    const q = p.pl, v = clamp(1 - q.pos.distanceTo(P0.pl.pos) / 80, 0.15, 0.7);
+    noise(0.35, 'lowpass', 2000, 0.5, 0.8 * v, 0, true); osc('sine', 140, 40, 0.2, 0.6 * v);
+    const mp = new V3(q.pos.x - Math.sin(q.yaw) * 0.7, q.pos.y + 1.4, q.pos.z - Math.cos(q.yaw) * 0.7);
+    puff(mp, L(0xBDB5A8), 0.14, 0.5, 0.3, 1); sparks(mp, 2, 3);
+  }
+  // Host: posizione dei compagni (ammorbidita), rigenerazione, rialzo e rientro
+  function updateRemoteHost(p, dt) {
+    const q = p.pl, n = p.net;
+    if (n && !q.down && !q.dead) {
+      const k = damp(20, dt);
+      q.pos.x += (n.x - q.pos.x) * k; q.pos.y += (n.y - q.pos.y) * k; q.pos.z += (n.z - q.pos.z) * k;
+      q.yaw += angDiff(n.yaw, q.yaw) * k; q.pitch += (n.pitch - q.pitch) * k;
+      q.vel.set(n.vx, 0, n.vz); q.onGround = n.g;
+      if (q.onGround) q.bob += dt * Math.hypot(n.vx, n.vz) * 1.7;
+    } else q.vel.set(0, 0, 0);
+    q.lastHurt += dt;
+    if (q.inv > 0) q.inv -= dt;
+    if (!q.down && !q.dead && q.lastHurt > 3 && q.health < q.maxHp) q.health = Math.min(q.maxHp, q.health + 7 * up.regen * dt);
+    usePlayer(p);
+    updateDowned(dt);
+    updateRespawn(dt);
+  }
+  // Istantanea dello stato di gioco, 15 volte al secondo
+  function netSnapshot() {
+    const P = players.map((p) => {
+      const q = p.pl, s = p.stats, f = (q.down ? 1 : 0) | (q.dead ? 2 : 0) | (q.helper ? 4 : 0) | (q.onGround ? 8 : 0);
+      return [p.slot | 0, r2(q.pos.x), r2(q.pos.y), r2(q.pos.z), r3(q.yaw), r3(q.pitch), r1(q.vel.x), r1(q.vel.z),
+        r1(q.health), q.maxHp, Math.ceil(q.shield), f, r1(q.downT), r2(q.reviveT), r1(q.respawnT), r1(Math.max(0, q.inv)), p.tp | 0,
+        r1(Math.max(0, p.eff.pierce)), p.eff.explo, r1(Math.max(0, p.eff.boots))].concat(STAT_KEYS.map((k) => s[k]));
+    });
+    const E = [];
+    let boss = null;
+    for (const e of enemies) {
+      if (!e.alive) continue;
+      if (e.T.boss) boss = e;
+      const a = e.armor;
+      const f = 1 | (e.los ? 2 : 0) | (e.hatOff ? 4 : 0) | (e.stun > 0 ? 8 : 0) | (e === bounty ? 16 : 0) | (a.L <= 0 ? 32 : 0) | (a.R <= 0 ? 64 : 0) |
+        (a.CL <= 0 ? 128 : 0) | (a.CR <= 0 ? 256 : 0) | (e.plateOpenT > 0 ? 512 : 0) | (e.flash > 0 ? 1024 : 0);
+      E.push([e.id, TYPE_KEYS.indexOf(e.type), r2(e.root.position.x), r2(e.T.fly ? e.body.position.y : e.root.position.y), r2(e.root.position.z), r3(e.yaw), f,
+        e.windup > 0 ? r2(clamp(1 - e.windup / e.s.windup, 0.01, 1)) : 0, e.tgt ? e.tgt.slot | 0 : 0]);
+    }
+    let bm = 0;
+    bottles.forEach((b, i) => { if (b.alive) bm |= 1 << i; });
+    return {
+      t: 'snap', w: wave, r: hostileAlive() + spawnQueue.filter((t) => t !== 'golden').length, l: lives, f: Math.round(focus), ft: r2(Math.max(0, focusT)),
+      st: r1(Math.max(0, stormT)), bt: r1(Math.max(0, bountyT)), bf: boss ? r3(Math.max(0, boss.hp / boss.maxHp)) : -1, bm,
+      p: P, e: E, k: pickups.map((k) => [k.id, PICK_KEYS.indexOf(k.type), r2(k.g.position.x), r2(k.g.position.z), r1(k.life)])
+    };
+  }
+  function netHostTick(dt) {
+    net.snapT -= dt;
+    if (net.snapT > 0 || !net.remotes.length) return;
+    net.snapT = 1 / 15;
+    netAll(netSnapshot());
+  }
+
+  // ---------- Client: elenco dei giocatori ----------
+  function syncRoster(list, you) {
+    if (!Array.isArray(list)) return;
+    net.slot = clamp(you | 0, 0, 3); P0.slot = net.slot; P0.name = net.name;
+    const keep = [];
+    for (const r of list.slice(0, 4)) {
+      const s = clamp(r && r.s | 0, 0, 3);
+      if (s === net.slot || keep.some((o) => o.slot === s)) continue;
+      let p = net.remotes.find((o) => o.slot === s);
+      if (!p) {
+        const used = keep.concat(net.remotes).map((o) => o.idx);
+        p = makeRemotePlayer([1, 2, 3].find((i) => !used.includes(i)) || 3, s, cleanName(r.n) || 'Giocatore ' + (s + 1));
+      }
+      keep.push(p);
+    }
+    for (const p of net.remotes) if (!keep.includes(p)) scene.remove(p.avatar);
+    net.remotes = keep;
+    net.roster = list.slice(0, 4).map((r) => ({ s: clamp(r && r.s | 0, 0, 3), n: cleanName(r && r.n) || 'Giocatore' }));
+    if (state !== 'menu') players = [P0].concat(keep);
+    renderNet();
+  }
+
+  // ---------- Client: messaggi dall'host ----------
+  let zapAt = 0;
+  function clientMsg(m) {
+    if (!m || typeof m !== 'object') return;
+    if (m.t === 'roster') { syncRoster(m.pl, m.you); return; }
+    if (m.t === 'deny') { netReset(); netMsg(cleanText(m.m) || 'Ingresso rifiutato.', true); renderNet(); return; }
+    if (m.t === 'start') { clientStart(m); return; }
+    if (m.t === 'over') {
+      if (state !== 'play') return;
+      const S = newStats(), src = m.S || {};
+      for (const k of ['shots', 'hits', 'kills', 'heads', 'score', 'bossKills', 'revives', 'maxCombo']) S[k] = Math.max(0, fin(src[k]) | 0);
+      wave = Math.max(0, fin(m.w) | 0);
+      endScreen(S, clamp(fin(m.n, 1) | 0, 1, 4), cleanText(m.tt, 400));
+      return;
+    }
+    if (state !== 'play') return;
+    usePlayer(P0);
+    switch (m.t) {
+      case 'snap': applySnapshot(m); break;
+      case 'bolt': {
+        const v = v3(m.v), sp = v.length();
+        if (sp < 0.1 || bolts.length > 80) break;
+        const p = v3(m.p);
+        spawnBolt(p, v.multiplyScalar(1 / sp), clamp(sp, 1, 60), 0, clamp(fin(m.s, 1), 0.5, 3));
+        if (clockT - zapAt > 0.06) { zapAt = clockT; sfx.zap(clamp(1 - p.distanceTo(pl.pos) / 60, 0.15, 1)); }
+        break;
+      }
+      case 'kill': {
+        const e = enemies.find((o) => o.id === m.id);
+        if (!e || !e.alive) break;
+        e.alive = false; e.dieT = 0; e.vy = 0; e.fallDir = fin(m.fd, 1) < 0 ? -1 : 1;
+        const cp = new V3(); e.torso.getWorldPosition(cp); if (!e.T.fly) cp.y += 0.3 * e.scale;
+        deathFx(e, cp, clamp(1 - cp.distanceTo(pl.pos) / 70, 0.25, 1));
+        if (e === bounty) clearBounty();
+        refreshShootables();
+        break;
+      }
+      case 'bottles': placeBottles(m.b); break;
+      case 'up': applyUp(m.v); if (m.n) medal('Potenziamento di squadra: ' + cleanText(m.n, 40), 0); break;
+      case 'boom': boomFx(v3(m.p)); break;
+      case 'bang': remoteBang(players.find((o) => o.slot === (m.s | 0))); break;
+      case 'pop': popup(cleanText(m.x, 12), v3(m.p), cleanCls(m.c)); break;
+      case 'medal': medal(cleanText(m.s, 80), 0); break;
+      case 'hm': hitmark(cleanCls(m.k)); break;
+      case 'hurt': hurtFx({ x: fin(m.f && m.f[0]), z: fin(m.f && m.f[1]) }); break;
+      case 'loader': giveLoader(); break;
+      case 'toast': toast(cleanText(m.m), clamp(fin(m.ms, 1800), 500, 6000)); break;
+      case 'banner': {
+        // Solo testo e, al più, una riga secondaria: nessun altro codice HTML viene accettato
+        const mm = /^([^<>]*)(?:<small>([^<>]*)<\/small>)?$/.exec(String(m.h == null ? '' : m.h).slice(0, 240));
+        const esc = (s) => s.replace(/&/g, '&amp;');
+        if (mm) banner(esc(mm[1]) + (mm[2] ? '<small>' + esc(mm[2]) + '</small>' : ''), clamp(fin(m.ms, 2200), 500, 6000));
+        break;
+      }
+      default: break;
+    }
+  }
+  function clientStart(m) {
+    initAudio();
+    menuOpen = false; state = 'play';
+    clearWorld(); resetExtras();
+    for (const b of bottles) scene.remove(b.g);
+    bottles.length = 0;
+    syncRoster(m.pl, m.you);
+    players = [P0].concat(net.remotes);
+    for (const p of net.remotes) { Object.assign(p.pl, newPl()); p.net = null; p.seen = false; Object.assign(p.stats, newStats()); }
+    wave = Math.max(0, fin(m.w) | 0); spawnQueue = []; inIntermission = false; waveDamage = 0;
+    $('bossBox').hidden = true;
+    usePlayer(P0);
+    P0.mq.length = 0;
+    Object.assign(pl, newPl());
+    pl.pos.set(-8, 0, 0); pl.yaw = -Math.PI / 2;
+    Object.assign(stats, newStats());
+    Object.assign(G, newG());
+    Object.assign(inp, newInput(), { pad: P0.padIndex !== null });
+    P0.tp = -1; // la prima istantanea porta la posizione di partenza decisa dall'host
+    updateAmmo(); updateHealth(); updateScore();
+    gun.root.visible = true;
+    HU.pstatus.hidden = true;
+    $('aimBtn').classList.remove('on');
+    if (m.up) applyUp(m.up);
+    if (Array.isArray(m.b)) placeBottles(m.b); else refreshShootables();
+    net.lastSnap = clockT; net.warnT = clockT;
+    $('waveLbl').textContent = 'Ondata ' + wave;
+    layoutViews();
+    showScreen(null);
+    if (!isTouch) toast('Partita online iniziata: clicca sullo schermo per agganciare la mira', 3200);
+  }
+  function applySnapshot(m) {
+    net.lastSnap = clockT;
+    const w = Math.max(0, fin(m.w) | 0);
+    if (w !== wave) { wave = w; $('waveLbl').textContent = 'Ondata ' + wave; }
+    $('enemyLbl').textContent = 'Robot rimasti: ' + Math.max(0, fin(m.r) | 0);
+    const lv = clamp(fin(m.l) | 0, 0, MAX_LIVES);
+    if (lv !== lives) { lives = lv; updateLives(); }
+    const ft = clamp(fin(m.ft), 0, 5);
+    if (ft > 0 && focusT <= 0) { canvas.style.filter = FOCUS_FILTER; sfx.focus(); }
+    if (ft <= 0 && focusT > 0) canvas.style.filter = '';
+    focus = clamp(fin(m.f), 0, 100); focusT = ft;
+    updateFocusHud();
+    stormT = clamp(fin(m.st), 0, 30); bountyT = clamp(fin(m.bt), 0, 30);
+    const bf = fin(m.bf, -1);
+    $('bossBox').hidden = bf < 0;
+    if (bf >= 0) $('bossFill').style.width = (clamp(bf, 0, 1) * 100).toFixed(1) + '%';
+
+    // Giocatori: il proprio stato arriva dall'host, gli altri vengono mostrati come corpi
+    if (Array.isArray(m.p)) for (const a of m.p) {
+      if (!Array.isArray(a)) continue;
+      const p = players.find((o) => o.slot === (a[0] | 0));
+      if (!p) continue;
+      const q = p.pl, f = a[11] | 0, wasDead = q.dead, wasDown = q.down;
+      q.maxHp = clamp(fin(a[9], 100), 1, 2000); q.health = clamp(fin(a[8]), 0, q.maxHp); q.shield = clamp(fin(a[10]), 0, 200);
+      q.down = !!(f & 1); q.dead = !!(f & 2); q.helper = (f & 4) ? p : null;
+      q.downT = fin(a[12]); q.reviveT = fin(a[13]); q.respawnT = fin(a[14]); q.inv = fin(a[15]);
+      p.eff.pierce = fin(a[17]); p.eff.explo = Math.max(0, fin(a[18]) | 0); p.eff.boots = fin(a[19]);
+      STAT_KEYS.forEach((k, i) => { p.stats[k] = Math.max(0, fin(a[20 + i]) | 0); });
+      const x = fin(a[1]), y = fin(a[2]), z = fin(a[3]);
+      if (p === P0) {
+        if ((a[16] | 0) !== P0.tp) {
+          // Spostamento deciso dall'host (inizio partita, rientro in gioco, fine ondata)
+          if (P0.tp < 0) q.yaw = fin(a[4]);
+          P0.tp = a[16] | 0;
+          q.pos.set(x, y, z); q.vel.set(0, 0, 0);
+        }
+        if (wasDead && !q.dead) { G.rounds = 6; G.state = 'idle'; G.stage = ''; updateAmmo(); sfx.bell(); }
+        if ((q.down && !wasDown) || (q.dead && !wasDead)) {
+          inp.adsToggle = false; inp.adsHeld = false; G.state = 'idle'; G.stage = '';
+          $('aimBtn').classList.remove('on');
+        }
+        updateHealth(); updateScore();
+      } else {
+        p.net = { x, y, z, yaw: fin(a[4]), pitch: clamp(fin(a[5]), -1.5, 1.5), vx: fin(a[6]), vz: fin(a[7]), g: !!(f & 8) };
+        if (!p.seen || Math.hypot(q.pos.x - x, q.pos.z - z) > 6) { q.pos.set(x, y, z); q.yaw = p.net.yaw; p.seen = true; }
+      }
+    }
+
+    // Robot: creati al primo avvistamento, rimossi quando l'host non li elenca più
+    if (Array.isArray(m.e)) {
+      const seen = new Set();
+      let changed = false, hasBounty = false;
+      for (const a of m.e) {
+        if (!Array.isArray(a)) continue;
+        const id = a[0] | 0, type = TYPE_KEYS[a[1] | 0];
+        if (!type) continue;
+        seen.add(id);
+        const x = fin(a[2]), y = fin(a[3]), z = fin(a[4]), f = a[6] | 0, wind = clamp(fin(a[7]), 0, 1);
+        let e = enemies.find((o) => o.id === id);
+        if (e && !e.alive) continue; // già abbattuto da un evento
+        if (!e) {
+          if (enemies.length > 60) continue;
+          e = makeEnemy(type, wave, x, z);
+          e.id = id;
+          if (e.T.fly) e.body.position.y = y; else e.root.position.y = y;
+          e.yaw = e.root.rotation.y = fin(a[5]);
+        }
+        if (wind > 0 && !(e.net && e.net.wind > 0)) sfx.windup(clamp(1 - Math.hypot(x - pl.pos.x, z - pl.pos.z) / 40, 0.2, 1));
+        e.net = { x, y, z, yaw: fin(a[5]), los: !!(f & 2), stun: !!(f & 8), flash: !!(f & 1024), wind, tgt: a[8] | 0, open: !!(f & 512) };
+        const back = new V3(-Math.sin(e.yaw), 0, -Math.cos(e.yaw));
+        if ((f & 4) && !e.hatOff && e.hat) knockHat(e, back);
+        for (const [bit, k] of PAD_BITS) {
+          if (!(f & bit)) continue;
+          const part = e.parts.find((o) => o.userData.pad === k && o.userData.active !== false);
+          if (part) breakPad(e, part, back);
+        }
+        if (f & 16) { hasBounty = true; if (!e.marker) addBountyMarker(e); bounty = e; }
+      }
+      if (!hasBounty && bounty) clearBounty();
+      for (const e of enemies) if (e.alive && !seen.has(e.id)) { e.alive = false; e.dieT = 99; scene.remove(e.root); changed = true; }
+      if (changed) refreshShootables();
+    }
+
+    // Oggetti a terra
+    if (Array.isArray(m.k)) {
+      const ids = new Set();
+      for (const a of m.k) {
+        if (!Array.isArray(a)) continue;
+        const id = a[0] | 0, type = PICK_KEYS[a[1] | 0];
+        if (!type) continue;
+        ids.add(id);
+        let k = pickups.find((o) => o.id === id);
+        if (!k) { if (pickups.length > 30) continue; k = spawnPickup(type, fin(a[2]), fin(a[3])); k.id = id; }
+        k.life = fin(a[4]);
+      }
+      for (let i = pickups.length - 1; i >= 0; i--) if (!ids.has(pickups[i].id)) { scene.remove(pickups[i].g); pickups.splice(i, 1); }
+    }
+
+    // Bottiglie rotte da altri giocatori
+    const bm = fin(m.bm) | 0;
+    bottles.forEach((b, i) => { if (b.alive && !(bm >> i & 1)) bottleVisual(b, b.g.position.clone().add(new V3(0, 0.15, 0))); });
+  }
+
+  // ---------- Client: simulazione locale ----------
+  function smoothRemote(p, dt) {
+    const q = p.pl, n = p.net;
+    if (!n) return;
+    const k = damp(14, dt);
+    q.pos.x += (n.x - q.pos.x) * k; q.pos.y += (n.y - q.pos.y) * k; q.pos.z += (n.z - q.pos.z) * k;
+    q.yaw += angDiff(n.yaw, q.yaw) * k; q.pitch += (n.pitch - q.pitch) * k;
+    q.vel.set(n.vx, 0, n.vz); q.onGround = n.g;
+    if (q.onGround && !q.down) q.bob += dt * Math.hypot(n.vx, n.vz) * 1.7;
+  }
+  // Robot visti da un client: seguono la posizione inviata dall'host, senza intelligenza propria
+  function updateReplica(e, dt, es) {
+    if (!e.alive) return updateEnemy(e, dt * es);
+    const n = e.net;
+    if (!n) return true;
+    e.life += dt;
+    const pos = e.root.position, k = damp(12, dt), ox = pos.x, oz = pos.z;
+    pos.x += (n.x - pos.x) * k; pos.z += (n.z - pos.z) * k;
+    e.yaw += angDiff(n.yaw, e.yaw) * k;
+    e.root.rotation.y = e.yaw;
+    const spd = Math.hypot(pos.x - ox, pos.z - oz) / Math.max(dt, 1e-4);
+    e.los = n.los; e.stun = n.stun ? 0.3 : 0;
+    e.mats.mBody.emissive.setScalar(n.flash ? 0.5 : 0);
+    if (e.T.fly) {
+      e.body.position.y += (n.y - e.body.position.y) * k;
+      e.body.rotation.x = clamp(spd / 10, 0, 0.3);
+      for (const r of e.rotors) r.rotation.y += dt * 40;
+    } else {
+      pos.y += (n.y - pos.y) * k;
+      const tg = players.find((o) => o.slot === n.tgt) || P0;
+      usePlayer(tg);
+      animateHumanoid(e, dt, spd > 0.3 ? spd : 0, Math.hypot(tg.pl.pos.x - pos.x, tg.pl.pos.z - pos.z) || 0.001);
+      usePlayer(P0);
+    }
+    if (e.T.golden) return true;
+    if (n.wind > 0) {
+      e.mats.mEye.emissiveIntensity = 3 + n.wind * 9;
+      e.muzzle.scale.setScalar(1 + n.wind * 0.8);
+      if (e.T.boss && e.plates) e.plates.forEach((p) => { p.position.x = Math.sign(p.position.x || 1) * (0.062 + 0.13 * Math.min(1, n.wind * 2)); });
+    } else {
+      e.muzzle.scale.setScalar(1);
+      e.mats.mEye.emissiveIntensity = lerp(e.mats.mEye.emissiveIntensity, 3, damp(10, dt));
+      if (e.T.boss && e.plates && !n.open) e.plates.forEach((p) => { p.position.x = lerp(p.position.x, Math.sign(p.position.x || 1) * 0.062, damp(8, dt)); });
+    }
+    return true;
+  }
+  function simulateClient(dt) {
+    const es = focusT > 0 ? 0.35 : 1;
+    usePlayer(P0);
+    updateAimAssist(dt);
+    const mv = updatePlayer(dt);
+    updateGun(dt, mv.moving, mv.sprint);
+    for (const p of players) if (p.remote) smoothRemote(p, dt);
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      if (!updateReplica(enemies[i], dt, es)) { scene.remove(enemies[i].root); enemies.splice(i, 1); }
+    }
+    usePlayer(P0);
+    updateBolts(dt * es);
+    // Oggetti, effetti e segnali: solo la parte visiva, i tempi veri li tiene l'host
+    for (const k of pickups) {
+      k.life -= dt; k.t += dt;
+      k.icon.rotation.y += dt * 2; k.icon.position.y = 0.8 + Math.sin(k.t * 3) * 0.12;
+      k.g.visible = k.life > 5 || Math.sin(k.t * 18) > 0;
+    }
+    if (eff.pierce > 0) eff.pierce -= dt;
+    if (eff.boots > 0) eff.boots -= dt;
+    if (focusT > 0) { focusT -= dt; if (focusT <= 0) canvas.style.filter = ''; updateFocusHud(); }
+    if (stormT > 0) stormT -= dt;
+    scene.fog.density = lerp(scene.fog.density, stormT > 0 ? 0.03 : 0.0048, damp(1.2, dt));
+    if (bounty) { bountyT -= dt; if (bounty.marker) bounty.marker.rotation.y += dt * 3; }
+    updateTrackers(dt);
+    usePlayer(P0);
+    updateCamera(dt);
+    updateHud(dt);
+    updateAvatars(clockT);
+    // Invio della propria posizione, 20 volte al secondo
+    net.stT -= dt;
+    if (net.stT <= 0) {
+      net.stT = 0.05;
+      netSend(net.host, { t: 'st', tp: P0.tp, p: [r2(pl.pos.x), r2(pl.pos.y), r2(pl.pos.z)], y: r3(pl.yaw), pi: r3(pl.pitch), v: [r1(pl.vel.x), r1(pl.vel.z)], g: pl.onGround ? 1 : 0 });
+    }
+    if (clockT - net.lastSnap > 3 && clockT - net.warnT > 5) { net.warnT = clockT; toast('In attesa dell\'host: collegamento lento oppure gioco dell\'host non in primo piano', 2800); }
+  }
+  // Colpo sparato da un client: effetti subito in locale, l'esito lo decide l'host
+  function clientShot(hit, tg, origin, dir, exPt) {
+    const m = { t: 'shot', k: 'miss' };
+    if (exPt) m.ex = [r2(exPt.x), r2(exPt.y), r2(exPt.z)];
+    if (hit) {
+      const ud = hit.object.userData || {};
+      if (ud.enemy) {
+        m.k = 'hit'; m.id = ud.enemy.id; m.pi = ud.enemy.parts.indexOf(hit.object);
+        m.pt = [r2(hit.point.x), r2(hit.point.y), r2(hit.point.z)];
+        sparks(hit.point, 5, 5); sfx.clang();
+      } else if (ud.bottle) {
+        m.k = 'bottle'; m.i = bottles.indexOf(ud.bottle);
+        bottleVisual(ud.bottle, hit.point);
+      } else if (ud.tumble) {
+        m.k = 'tumble'; sfx.ping();
+        puff(hit.point, L(0x9C7A4E), 0.4, 0.8, 0.4, 5);
+        hit.object.position.x = -46; hit.object.position.z = rand(-30, 30);
+      } else {
+        const n = hit.face ? hit.face.normal.clone().transformDirection(hit.object.matrixWorld) : dir.clone().negate();
+        bulletHole(hit.point, n);
+        puff(hit.point, L(0xB89468), 0.25, 0.7, 0.3, 2);
+        sparks(hit.point, 3, 4);
+      }
+    } else if (tg < 400) puff(origin.clone().addScaledVector(dir, tg), L(0xD2B081), 0.35, 1.0, 0.6, 3);
+    netSend(net.host, m);
+  }
+
+  // ---------- Stanze: creazione, ingresso, uscita ----------
+  function loadPeer() {
+    return new Promise((res, rej) => {
+      if (window.__FakePeer || window.Peer) { res(); return; }
+      const s = document.createElement('script');
+      s.src = PEER_URL;
+      s.onload = () => { if (window.Peer) res(); else rej(new Error('libreria non valida')); };
+      s.onerror = () => rej(new Error('libreria non raggiungibile'));
+      document.head.appendChild(s);
+    });
+  }
+  function peerOpts() {
+    const o = { debug: 0 };
+    if (TURN_SERVERS.length) o.config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }].concat(TURN_SERVERS) };
+    if (window.__peerOpts) Object.assign(o, window.__peerOpts); // usato solo dalle prove automatiche
+    return o;
+  }
+  function netMsg(t, bad) { const el = $('netMsg'); el.textContent = t || ''; el.classList.toggle('bad', !!bad); }
+  function netErrText(ty) {
+    if (ty === 'peer-unavailable') return 'Stanza non trovata: controlla il codice e che chi l\'ha creata abbia ancora il gioco aperto.';
+    if (ty === 'browser-incompatible') return 'Questo browser non supporta il collegamento diretto tra giocatori (WebRTC).';
+    if (ty === 'unavailable-id') return 'Codice stanza già in uso: riprova.';
+    return 'Collegamento non riuscito: controlla la connessione e riprova. Il gioco online funziona dal sito pubblicato, potrebbe non funzionare da un\'anteprima.';
+  }
+  function saveName() {
+    net.name = cleanName($('netName').value) || 'Pistolero';
+    $('netName').value = net.name;
+    try { localStorage.setItem(NAME_KEY, net.name); } catch (e) { /* ignora */ }
+  }
+  function netReset() {
+    const pe = net.peer;
+    net.peer = null; net.host = null; net.mode = null; net.code = ''; net.busy = false; net.slot = 0;
+    for (const p of net.remotes) scene.remove(p.avatar);
+    net.remotes = []; net.roster = [];
+    P0.slot = 0; P0.name = '';
+    try { if (pe) pe.destroy(); } catch (e) { /* ignora */ }
+  }
+  function netCreate() {
+    if (net.busy || net.mode) return;
+    net.busy = true; saveName(); netMsg('Creo la stanza...'); renderNet();
+    loadPeer().then(() => openRoom(0)).catch(() => {
+      net.busy = false; netMsg('Libreria di rete non raggiungibile: serve una connessione a Internet.', true); renderNet();
+    });
+  }
+  function openRoom(tries) {
+    const PeerC = window.__FakePeer || window.Peer;
+    let code = '';
+    for (let i = 0; i < 5; i++) code += CODE_CHARS[(Math.random() * CODE_CHARS.length) | 0];
+    let pe;
+    try { pe = new PeerC(NET_PREFIX + code, peerOpts()); }
+    catch (e) { net.busy = false; netMsg(netErrText('browser-incompatible'), true); renderNet(); return; }
+    net.peer = pe;
+    const timer = setTimeout(() => {
+      if (net.peer === pe && !net.mode) { netReset(); netMsg(netErrText(''), true); renderNet(); }
+    }, 20000);
+    pe.on('open', () => {
+      if (net.peer !== pe) return;
+      clearTimeout(timer);
+      net.busy = false; net.mode = 'host'; net.code = code; net.slot = 0; P0.slot = 0; P0.name = net.name;
+      net.roster = rosterList();
+      netMsg('Stanza aperta: passa il codice o il link di invito ai compagni.');
+      renderNet();
+    });
+    pe.on('connection', (c) => { if (net.peer === pe) hostAccept(c); });
+    pe.on('disconnected', () => { if (net.peer === pe) { try { pe.reconnect(); } catch (e) { /* ignora */ } } });
+    pe.on('error', (err) => {
+      if (net.peer !== pe) return;
+      const ty = err && err.type;
+      if (net.mode) { if (ty !== 'peer-unavailable') netMsg('Server di collegamento non raggiungibile: chi è già nella stanza resta collegato, i nuovi ingressi potrebbero non riuscire.', true); return; }
+      clearTimeout(timer);
+      if (ty === 'unavailable-id' && tries < 4) { net.peer = null; try { pe.destroy(); } catch (e) { /* ignora */ } openRoom(tries + 1); return; }
+      netReset(); netMsg(netErrText(ty), true); renderNet();
+    });
+  }
+  function netJoin() {
+    if (net.busy || net.mode) return;
+    const code = String($('netCode').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+    if (code.length !== 5) { netMsg('Scrivi il codice di 5 caratteri della stanza.', true); return; }
+    initAudio();
+    net.busy = true; saveName(); netMsg('Collegamento alla stanza ' + code + '...'); renderNet();
+    loadPeer().then(() => {
+      const PeerC = window.__FakePeer || window.Peer;
+      let pe;
+      try { pe = new PeerC(peerOpts()); }
+      catch (e) { net.busy = false; netMsg(netErrText('browser-incompatible'), true); renderNet(); return; }
+      net.peer = pe;
+      const fail = (t) => { if (net.peer !== pe) return; netReset(); netMsg(t, true); renderNet(); };
+      const timer = setTimeout(() => {
+        if (net.peer === pe && !net.mode) fail('Collegamento non riuscito entro 20 secondi: la rete di uno dei due giocatori potrebbe bloccare i collegamenti diretti. Prova con un\'altra rete.');
+      }, 20000);
+      pe.on('open', () => {
+        if (net.peer !== pe) return;
+        const c = pe.connect(NET_PREFIX + code, { reliable: true, serialization: 'json', metadata: { name: net.name } });
+        c.on('open', () => {
+          if (net.peer !== pe) return;
+          clearTimeout(timer);
+          net.busy = false; net.mode = 'client'; net.host = c; net.code = code;
+          netMsg('Sei nella stanza: la partita la avvia chi l\'ha creata.');
+          renderNet();
+        });
+        c.on('data', (m) => {
+          if (net.peer !== pe) return;
+          try { clientMsg(m); } catch (e) { console.error('Errore di rete (client):', e); }
+          try { usePlayer(P0); } catch (e) { /* ignora */ }
+        });
+        c.on('close', () => { if (net.peer === pe) hostLost(); });
+        c.on('error', () => { if (net.peer === pe) hostLost(); });
+      });
+      pe.on('error', (err) => { if (net.peer === pe && !net.mode) { clearTimeout(timer); fail(netErrText(err && err.type)); } });
+    }).catch(() => {
+      net.busy = false; netMsg('Libreria di rete non raggiungibile: serve una connessione a Internet.', true); renderNet();
+    });
+  }
+  function hostLost() {
+    const wasRoom = !!net.mode;
+    netReset();
+    if (state !== 'menu') toMenu();
+    netMsg(wasRoom ? 'Collegamento chiuso: chi ha creato la stanza è uscito o la rete è caduta.' : 'Collegamento alla stanza non riuscito.', true);
+    renderNet();
+  }
+  function netLeave() {
+    netReset();
+    if (state !== 'menu') toMenu();
+    netMsg('Hai lasciato la stanza.');
+    renderNet();
+  }
+  // Ritorno alla schermata iniziale (uscita da una stanza a partita in corso)
+  function toMenu() {
+    state = 'menu'; menuOpen = false;
+    if (document.pointerLockElement) document.exitPointerLock();
+    clearWorld(); resetExtras();
+    for (const b of bottles) scene.remove(b.g);
+    bottles.length = 0;
+    refreshShootables();
+    players = [P0];
+    usePlayer(P0);
+    P0.avatar.visible = false;
+    gun.root.visible = false;
+    if (P1x) { P1x.avatar.visible = false; P1x.gun.root.visible = false; }
+    $('bossBox').hidden = true;
+    canvas.style.filter = '';
+    layoutViews();
+    showScreen('startScreen');
+  }
+  function netButtons() {
+    const inRoom = !!net.mode, cli = net.mode === 'client';
+    $('againBtn').hidden = cli; $('netWait').hidden = !cli; $('leaveBtn2').hidden = !inRoom;
+    $('leaveBtn').hidden = !inRoom; $('restartBtn').hidden = cli;
+  }
+  function renderNet() {
+    const inRoom = !!net.mode;
+    $('netIdle').hidden = inRoom; $('netRoom').hidden = !inRoom;
+    $('netCreate').disabled = net.busy; $('netJoin').disabled = net.busy;
+    $('netName').disabled = inRoom || net.busy; $('netCode').disabled = net.busy;
+    if (inRoom) {
+      $('netCodeLbl').textContent = net.code;
+      const ul = $('netList');
+      ul.textContent = '';
+      for (const r of net.roster) {
+        const li = document.createElement('li'), dot = document.createElement('i');
+        dot.style.background = '#' + PCOL[r.s].toString(16).padStart(6, '0');
+        li.appendChild(dot);
+        li.appendChild(document.createTextNode(r.n + (r.s === 0 ? ' (host)' : '') + (r.s === net.slot ? ', tu' : '')));
+        ul.appendChild(li);
+      }
+      $('netCopy').hidden = net.mode !== 'host';
+    }
+    renderLobby();
+    netButtons();
+  }
+  $('netCreate').addEventListener('click', netCreate);
+  $('netJoin').addEventListener('click', netJoin);
+  $('netCode').addEventListener('keydown', (e) => { if (e.key === 'Enter') netJoin(); });
+  $('netLeave').addEventListener('click', netLeave);
+  $('leaveBtn').addEventListener('click', netLeave);
+  $('leaveBtn2').addEventListener('click', netLeave);
+  $('netCopy').addEventListener('click', () => {
+    const url = location.href.split('#')[0].split('?')[0] + '?stanza=' + net.code;
+    const show = () => netMsg('Link di invito: ' + url);
+    try { navigator.clipboard.writeText(url).then(() => netMsg('Link di invito copiato: incollalo ai compagni.'), show); } catch (e) { show(); }
+  });
+  try { $('netName').value = cleanName(localStorage.getItem(NAME_KEY) || ''); } catch (e) { /* ignora */ }
+  {
+    const q = /[?&]stanza=([A-Za-z0-9]{5})(?:&|$)/.exec(location.search || '');
+    if (q) { $('netCode').value = q[1].toUpperCase(); netMsg('Invito ricevuto: scrivi il tuo nome e premi Entra.'); }
+  }
+  // Chiusura della pagina: i compagni vengono avvisati subito
+  window.addEventListener('pagehide', () => { try { if (net.peer) net.peer.destroy(); } catch (e) { /* ignora */ } });
+  renderNet();
+
   function showScreen(id) {
     ['startScreen', 'pauseScreen', 'deadScreen', 'recScreen'].forEach((s) => { $(s).hidden = s !== id; });
     const set = $('settingsBox');
@@ -3360,6 +4209,7 @@
     if (P1x && !players.includes(P1x)) P1x.hud.root.hidden = true;
     splitLine.hidden = !(localPlayers().length > 1 && state !== 'menu');
     document.body.classList.toggle('playing', id === null);
+    netButtons();
   }
 
   function clearWorld() {
@@ -3384,15 +4234,16 @@
       Object.assign(pl, newPl());
       pl.pos.set(spots[p.idx][0], 0, spots[p.idx][1]);
       pl.yaw = -Math.PI / 2;
+      warp(p);
       Object.assign(stats, newStats());
       Object.assign(G, newG());
       Object.assign(inp, newInput(), { pad: p.padIndex !== null });
       updateAmmo(); updateHealth(); updateScore();
-      gun.root.visible = true;
+      if (gun) gun.root.visible = true;
       HU.pstatus.hidden = true;
     });
     $('aimBtn').classList.remove('on');
-    lives = localPlayers().length > 1 ? 2 : 1;
+    lives = [1, 1, 2, 3, 3][players.length] || 1; // Stelle iniziali: 1 da soli, 2 in coppia, 3 in tre o quattro
     updateLives();
     startWave();
   }
@@ -3400,39 +4251,53 @@
   // opts: { fromPad: avviato da controller, pad0: controller assegnato al Giocatore 1 }
   function startGame(opts) {
     opts = opts || {};
+    if (net.mode === 'client' || net.busy) return; // online la partita la avvia chi ha creato la stanza
     initAudio();
-    const two = lobby.p2Pad !== null && !isTouch;
+    const two = lobby.p2Pad !== null && !isTouch && !net.mode;
     if (two && !P1x) P1x = makeLocalPlayer(1);
-    players = two ? [P0, P1x] : [P0];
+    players = two ? [P0, P1x] : [P0].concat(net.mode === 'host' ? net.remotes : []);
+    if (P1x && !two) { P1x.avatar.visible = false; P1x.gun.root.visible = false; }
     P0.padIndex = opts.pad0 !== undefined && opts.pad0 !== null ? opts.pad0 : null;
     if (P1x) P1x.padIndex = two ? lobby.p2Pad : null;
-    state = 'play';
+    state = 'play'; menuOpen = false;
+    if (net.mode === 'host') { net.roster = rosterList(); for (const p of net.remotes) netSend(p.conn, { t: 'start', you: p.slot, pl: net.roster, w: 0 }); }
     newGame();
     layoutViews();
     showScreen(null);
     if (!opts.fromPad) requestLock();
   }
+  // Online il gioco non si può fermare: si apre solo il menu, l'azione continua
   function pause() {
-    if (state !== 'play') return;
-    state = 'pause';
+    if (state !== 'play' || menuOpen) return;
+    const online = !!net.mode;
+    if (online) menuOpen = true; else state = 'pause';
     inp.adsHeld = false; drag = null;
-    const S = teamStats(), n = localPlayers().length;
-    $('pauseInfo').textContent = (n > 1 ? n + ' giocatori, ' : '') + 'Ondata ' + wave + ', ' + S.score + ' punti, ' + S.kills + ' robot abbattuti. Stelle: ' + lives + '.';
+    const S = teamStats(), n = players.length;
+    $('pauseTitle').textContent = online ? 'Menu' : 'In pausa';
+    $('pauseInfo').textContent = (n > 1 ? n + ' giocatori, ' : '') + 'Ondata ' + wave + ', ' + S.score + ' punti, ' + S.kills + ' robot abbattuti. Stelle: ' + lives + '.' +
+      (online ? ' Partita online: il gioco continua mentre questo menu è aperto.' : '');
     showScreen('pauseScreen');
     if (document.pointerLockElement) document.exitPointerLock();
   }
   function resume(fromPad) {
+    menuOpen = false;
     state = 'play';
     showScreen(null);
     if (fromPad !== true) requestLock();
   }
   function die() {
-    state = 'dead';
+    const S = teamStats(), n = players.length;
+    const tt = n < 2 ? '' : players.map((p) => pname(p) + ': ' + p.stats.score + ' punti, ' + p.stats.kills + ' robot, ' + p.stats.revives + (p.stats.revives === 1 ? ' rialzo.' : ' rialzi.')).join(' ');
+    if (net.mode === 'host') netAll({ t: 'over', S, n, tt, w: wave });
+    endScreen(S, n, tt);
+  }
+  // S = statistiche di squadra, n = giocatori, tt = riepilogo per giocatore
+  function endScreen(S, n, tt) {
+    state = 'dead'; menuOpen = false;
     deadAt = performance.now();
     canvas.style.filter = '';
     if (document.pointerLockElement) document.exitPointerLock();
     buzz(200);
-    const S = teamStats(), n = localPlayers().length;
     const res = recordRun(S, n);
     $('deadMsg').textContent = res.pos === 1 ? 'Nuovo record personale!' : (n > 1 ? 'La squadra è caduta. L\'avamposto aspetta la rivincita.' : 'I robot hanno preso l\'avamposto. Per ora.');
     $('dWave').textContent = wave;
@@ -3444,7 +4309,7 @@
     $('dBest').textContent = n > 1 ? (bestN ? bestN + ' (' + n + ' giocatori)' : '-') : res.r.best.score + ' (ondata ' + res.r.best.wave + ')';
     const ts = $('teamStats');
     ts.hidden = n < 2;
-    ts.textContent = n < 2 ? '' : localPlayers().map((p) => 'Giocatore ' + (p.idx + 1) + ': ' + p.stats.score + ' punti, ' + p.stats.kills + ' robot, ' + p.stats.revives + (p.stats.revives === 1 ? ' rialzo.' : ' rialzi.')).join(' ');
+    ts.textContent = n < 2 ? '' : tt;
     $('newRecs').textContent = (res.pos ? 'Posizione nella tua classifica: ' + res.pos + ' su 5.' : 'Fuori dalla tua classifica delle 5 migliori.') + (res.newBest.length ? ' Nuovi record: ' + res.newBest.join(', ') + '.' : '');
     showBestLine();
     setTimeout(() => { if (state === 'dead') { showScreen('deadScreen'); $('againBtn').focus(); } }, 900);
@@ -3473,6 +4338,7 @@
       fwd = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0);
       str = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0);
     }
+    if (menuOpen) { fwd = 0; str = 0; } // menu aperto durante una partita online: il personaggio resta fermo
     const sy = Math.sin(pl.yaw), cy = Math.cos(pl.yaw);
     let mx = -sy * fwd + cy * str, mz = -cy * fwd - sy * str;
     const mag = Math.hypot(mx, mz);
@@ -3495,14 +4361,21 @@
     // Rigenerazione dopo 3 s senza danni
     pl.lastHurt += dt;
     if (pl.inv > 0) pl.inv -= dt; // protezione dopo il rientro
-    if (pl.lastHurt > 3 && pl.health < pl.maxHp) { pl.health = Math.min(pl.maxHp, pl.health + 7 * up.regen * dt); updateHealth(); }
+    if (net.mode !== 'client' && pl.lastHurt > 3 && pl.health < pl.maxHp) { pl.health = Math.min(pl.maxHp, pl.health + 7 * up.regen * dt); updateHealth(); }
     return { moving: clamp(hs / 5.2, 0, 1), sprint };
   }
 
   function updateCamera(dt) {
     if (pl.dead) {
       // Eliminato: visuale in terza persona alle spalle di un compagno
-      const q = localPlayers().find((o) => o !== CP && !o.pl.dead) || CP;
+      const q = players.find((o) => o !== CP && !o.pl.dead);
+      if (!q) {
+        // Nessun compagno in piedi: visuale dall'alto che ruota lentamente sul punto della caduta
+        const a = clockT * 0.3;
+        camera.position.set(pl.pos.x + Math.sin(a) * 7, pl.pos.y + 9, pl.pos.z + Math.cos(a) * 7);
+        camera.lookAt(pl.pos.x, pl.pos.y + 1, pl.pos.z);
+        return;
+      }
       const qp = q.pl;
       camera.position.set(qp.pos.x + Math.sin(qp.yaw) * 3.2, qp.pos.y + 2.2, qp.pos.z + Math.cos(qp.yaw) * 3.2);
       camera.rotation.set(-0.3, qp.yaw, 0);
@@ -3573,7 +4446,7 @@
   function simulate(dt) {
     const es = focusT > 0 ? 0.35 : 1; // Mira concentrata: nemici e proiettili rallentati
     for (const p of players) {
-      if (p.remote) continue;
+      if (p.remote) { updateRemoteHost(p, dt); continue; }
       usePlayer(p);
       updateAimAssist(dt);
       const mv = updatePlayer(dt);
@@ -3596,6 +4469,7 @@
     }
     updateAvatars(clockT);
     usePlayer(P0);
+    if (net.mode === 'host') netHostTick(dt);
   }
   gun.root.visible = false;
   let last = performance.now(), clockT = 0, menuA = 0;
@@ -3608,7 +4482,7 @@
     try {
       usePlayer(P0);
       pollPads(dt);
-      if (state === 'play') simulate(dt);
+      if (state === 'play') { if (net.mode === 'client') simulateClient(dt); else simulate(dt); }
       else if (state === 'menu') {
         menuA += dt * 0.05;
         camera.position.set(Math.sin(menuA) * 36, 6.5, Math.cos(menuA) * 36);
@@ -3623,7 +4497,7 @@
           }
           updateHud(dt);
         }
-        for (let i = enemies.length - 1; i >= 0; i--) updateEnemy(enemies[i], dt * 0.3);
+        if (net.mode !== 'client') for (let i = enemies.length - 1; i >= 0; i--) updateEnemy(enemies[i], dt * 0.3);
         updateAvatars(clockT);
       }
       usePlayer(P0);
@@ -3646,7 +4520,8 @@
     loadRec, recordRun, exportCode, importCode, renderRecords, openRecords, clutterMeshes, settings, stickIn,
     get assistFriction() { return P0.inp.assistF; }, renderer, camera, spawnPickup, pickups, eff, up, triggerEvent, offerUpgrades,
     chooseUpgrade, activateFocus, get focusT() { return focusT; }, setFocus: (v) => { focus = v; }, spawn: (t) => spawnAt(t), TYPES, bottles,
-    sim: (sec) => { for (let t = 0; t < sec && state === 'play'; t += 1 / 60) { simulate(1 / 60); updateFx(1 / 60); } scene.updateMatrixWorld(); },
+    sim: (sec) => { for (let t = 0; t < sec && state === 'play'; t += 1 / 60) { clockT += 1 / 60; usePlayer(P0); if (net.mode === 'client') simulateClient(1 / 60); else simulate(1 / 60); updateFx(1 / 60); } scene.updateMatrixWorld(); },
+    net, netCreate, netJoin, netLeave, netSnapshot, toMenu, pause, resume, get menuOpen() { return menuOpen; }, bolts, hostileAlive, get clockT() { return clockT; },
     get state() { return state; }, enemies, stats, G, pl, get wave() { return wave; }, fire: () => { P0.inp.fire = true; },
     start: (o) => startGame(o), reload: startReload, dragMode: () => { dragLook = true; }
   };
