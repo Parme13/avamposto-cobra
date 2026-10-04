@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Avamposto Cobra V07</title>
+<title>Avamposto Cobra V08</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Rye&display=swap" rel="stylesheet">
@@ -332,6 +332,7 @@
       <kbd>WASD</kbd><span>Muoviti (Shift per correre)</span>
       <kbd>Mouse</kbd><span>Mira, clic sinistro per sparare</span>
       <kbd>Clic destro</kbd><span>Mira di precisione con le tacche</span>
+      <kbd>V</kbd><span>Mira di precisione da tastiera: tienilo premuto (comodo con il trackpad)</span>
       <kbd>R</kbd><span>Ricarica (spara per interromperla)</span>
       <kbd>Spazio</kbd><span>Salta, anche sulle casse</span>
       <kbd>Esc</kbd><span>Pausa</span>
@@ -348,13 +349,15 @@
         <tr><td>Arti (gambe rallentano, braccio armato fa sbagliare mira)</td><td>×0,6</td></tr>
         <tr><td>Spallacci corazzati (si staccano)</td><td>×0,3</td></tr>
         <tr><td>Cappello (vola via, bonus)</td><td>0</td></tr>
+        <tr><td>Scudo dello Scudato (si rompe dopo 6 colpi)</td><td>0</td></tr>
       </tbody>
     </table>
-    <p class="muted">Nemici: Drone (1 colpo al busto), Sentinella (2), Assaltatore (2, attacca da vicino), Corazzato (3, protegge il nucleo). Ogni 5 ondate arriva lo Sceriffo di Ferro.</p>
-    <p class="muted">Oggetti: segui le colonne di luce colorate (cure, placche, caricatori, colpi speciali). Compaiono a caso e cadono dai robot abbattuti. A fine ondata scegli un potenziamento con 1, 2 o 3.</p>
-    <p class="muted">Bonus: robot d'oro (colonna dorata e freccia in alto), taglie, bottiglie, cappelli, rotolacampo (i cespugli secchi che rotolano), doppiette e combo. Colpi in testa e al nucleo caricano la Mira concentrata: tasto F rallenta il tempo. Quando l'occhio di un robot si illumina, sta per sparare.</p>
+    <p class="muted">Nemici: Sentinella (2 colpi al busto), Drone (1, si ferma in aria quando carica il colpo), Assaltatore (2, attacca da vicino), Corazzato (3, il suo colpo esplode a terra). Dall'ondata 5 il Kamikaze corre verso di te ed esplode: un colpo lo fa saltare e danneggia i robot vicini. Dall'ondata 6 il Cecchino spara dai tetti dei portici: il raggio rosso ti avvisa, mettiti al coperto. Dall'ondata 8 lo Scudato avanza dietro uno scudo: mira alle gambe, colpiscilo quando lo sposta per sparare oppure rompilo. Dall'ondata 10 i robot diventano più resistenti e dall'ondata 15 compaiono i veterani, con un anello dorato ai piedi.</p>
+    <p class="muted">Ogni 5 ondate arriva lo Sceriffo di Ferro: alterna ventaglio di colpi, raffica mirata e colpi di mortaio (esci dai cerchi rossi a terra). Sotto un terzo della vita spara più spesso.</p>
+    <p class="muted">Oggetti: segui le colonne di luce colorate (cure, placche, caricatori, colpi speciali). Placche e colpi esplosivi si sommano (fino a 150 e a 24), gli effetti a tempo ripartono da capo. Compaiono a caso e cadono dai robot abbattuti. A fine ondata scegli un potenziamento con 1, 2 o 3.</p>
+    <p class="muted">Bonus: robot d'oro (segue un percorso a 4 tappe dorate: prima lo abbatti, più ricco è il premio), taglie, bottiglie, cappelli, rotolacampo (i cespugli secchi che rotolano), doppiette e combo. Colpi in testa e al nucleo caricano la Mira concentrata: tasto F rallenta il tempo. Quando l'occhio di un robot si illumina, sta per sparare.</p>
       <p class="muted">In 2 giocatori arrivano più robot e lo Sceriffo è più resistente. Se un compagno va a terra hai 30 secondi per raggiungerlo: restagli vicino 3 secondi per rialzarlo.</p>
-      <p class="muted">Stelle dello sceriffo (★ sotto i punti): vite di squadra. Si parte con 1 Stella da soli e 2 in coppia; se ne guadagna una abbattendo lo Sceriffo di Ferro o raccogliendo la stella dorata (dall'ondata 3). Quando cadi da solo, o resti a terra troppo a lungo, una Stella ti fa rientrare dopo pochi secondi in un punto sicuro, protetto per 3 secondi. Senza Stelle: da soli la partita finisce, in squadra rientri alla fine dell'ondata.</p>
+      <p class="muted">Stelle dello sceriffo (★ sotto i punti): vite di squadra. Si parte con 1 Stella da soli, 2 in coppia e 3 in tre o quattro, e non se ne possono avere più di 3; se ne guadagna una abbattendo lo Sceriffo di Ferro o raccogliendo la stella dorata (dall'ondata 3). Quando cadi da solo, o resti a terra troppo a lungo, una Stella ti fa rientrare dopo pochi secondi in un punto sicuro, protetto per 3 secondi. Senza Stelle: da soli la partita finisce, in squadra rientri alla fine dell'ondata.</p>
       <p class="muted">Online: un giocatore crea la stanza e passa il codice (o il link di invito) ai compagni, che lo scrivono e premono Entra. La partita la avvia chi ha creato la stanza e il suo dispositivo fa da arbitro: se chiude il gioco, la partita finisce per tutti. Online il menu di pausa non ferma l'azione e il potenziamento di fine ondata lo sceglie chi ha creato la stanza.</p>
     </details>
     <p class="muted" id="bestLine" hidden></p>
@@ -394,7 +397,7 @@
       </div>
       <p class="muted" id="netMsg" aria-live="polite"></p>
     </div>
-    <p class="ver">Versione V07</p>
+    <p class="ver">Versione V08</p>
   </div>
 </div>
 
@@ -726,6 +729,7 @@
   const solids = [];      // mesh che bloccano proiettili e visuale
   const STEP = 0.4;       // altezza superabile camminando
   const bottleSpots = []; // appoggi possibili per le bottiglie bonus
+  const roofSpots = [];   // tettoie dei portici dove si appostano i Cecchini
   const lanternSpots = []; // pali dei portici con lanterna
   const ARENA_R = 49;
 
@@ -817,6 +821,7 @@
     const pd = 2.6, pz = z + face * (d / 2 + pd / 2 + 0.25);
     addBox(w + 0.3, 0.25, pd, x, 0.125, pz, M.plank2, { col: true });
     addBox(w + 0.5, 0.1, pd + 0.2, x, 3.15, pz, M.roof, { rx: -face * 0.08 });
+    roofSpots.push({ x, y: 3.22, z: pz, w: w / 2 - 0.9 });
     for (const s of [-1, 1]) {
       const postX = x + s * (w / 2 - 0.1), postZ = z + face * (d / 2 + pd + 0.1);
       lanternSpots.push([postX, 2.75, postZ + face * 0.16]);
@@ -1635,7 +1640,8 @@
 
   // ================= Arma: sparo, ricarica, danno localizzato =================
   const BASE_DMG = 58;
-  const ZONE_MULT = { head: 3, core: 2.5, torso: 1, limb: 0.6, armor: 0.3, hat: 0 };
+  let lastShot = null; // ultima traiettoria (per le prove di precisione)
+  const ZONE_MULT = { head: 3, core: 2.5, torso: 1, limb: 0.6, armor: 0.3, hat: 0, shield: 0 };
   const ray = new THREE.Raycaster();
   let shootables = [];
   let enemyMeshes = [];
@@ -1655,7 +1661,7 @@
     if (G.cd > 0 || G.pull > 0) return;
     if (G.rounds <= 0) { sfx.dry(); G.cd = 0.25; startReload(); return; }
     // Doppia azione: breve corsa del grilletto (cane che arretra, tamburo che ruota)
-    G.pull = 0.05; G.pending = true;
+    G.pull = 0.015; G.pending = true;
     G.cylTarget += Math.PI / 3;
     sfx.cock();
   }
@@ -1670,21 +1676,24 @@
     const mp = new V3(); gun.muzzle.getWorldPosition(mp);
     flashLight.position.copy(mp); flashLight.intensity = 7;
     puff(mp, L(0xBDB5A8), 0.12, 0.9, 0.35, 2);
-    // Rinculo sulla visuale
-    // Rinculo: la visuale sale e rientra da sola, resta solo una piccola parte
-    const kick = G.ads > 0.5 ? 0.018 : 0.026;
-    G.kick += kick;
-    pl.pitch = clamp(pl.pitch + kick * 0.25, -1.45, 1.45);
-    pl.yaw += rand(-0.004, 0.004);
-    // Traiettoria con dispersione
+    // Traiettoria: parte dalla mira di questo istante, prima che il rinculo sposti la visuale
+    camera.position.set(pl.pos.x, pl.pos.y + EYE, pl.pos.z);
+    camera.rotation.set(clamp(pl.pitch + G.kick, -1.5, 1.5), pl.yaw, 0);
     camera.updateMatrixWorld();
     scene.updateMatrixWorld();
     const origin = new V3(); camera.getWorldPosition(origin);
     const dir = new V3(); camera.getWorldDirection(dir);
     const right = new V3().setFromMatrixColumn(camera.matrixWorld, 0), upv = new V3().setFromMatrixColumn(camera.matrixWorld, 1);
+    const aim0 = dir.clone();
     const sp = currentSpread(), a = rand(0, Math.PI * 2), r = Math.sqrt(Math.random()) * sp;
     dir.addScaledVector(right, Math.cos(a) * r).addScaledVector(upv, Math.sin(a) * r).normalize();
-    G.bloom = Math.min(G.bloom + 0.035, 0.08);
+    lastShot = { aim: aim0, dir: dir.clone(), spread: sp };
+    G.bloom = Math.min(G.bloom + 0.022, 0.06);
+    // Rinculo: la visuale sale e rientra da sola, resta solo una piccola parte
+    const kick = G.ads > 0.5 ? 0.018 : 0.026;
+    G.kick += kick;
+    pl.pitch = clamp(pl.pitch + kick * 0.25, -1.45, 1.45);
+    pl.yaw += rand(-0.004, 0.004);
     ray.set(origin, dir); ray.far = 400;
     const hits = ray.intersectObjects(shootables, false);
     const tg = dir.y < -1e-4 ? -origin.y / dir.y : Infinity;
@@ -1727,7 +1736,7 @@
   }
 
   function startReload() {
-    if (G.state === 'reload' || G.rounds >= 6 || G.pull > 0) return;
+    if (G.state === 'reload' || G.rounds >= CAP() || G.pull > 0) return;
     G.state = 'reload'; G.stage = 'open'; G.t = 0; G.interrupt = false;
     sfx.open();
   }
@@ -1750,14 +1759,14 @@
       G.t += dt;
       if (G.stage === 'open') {
         poseT = 1; swingT = 1;
-        if (G.t > 0.22 * up.reload) { G.stage = 'eject'; G.t = 0; sfx.eject(); ejectCasings(6 - G.rounds); }
+        if (G.t > 0.22 * up.reload) { G.stage = 'eject'; G.t = 0; sfx.eject(); ejectCasings(Math.max(0, 6 - G.rounds)); }
       } else if (G.stage === 'eject') {
         poseT = 1; swingT = 1; tipUp = 1;
         if (G.t > 0.2 * up.reload) { G.stage = 'load'; G.t = 0; }
       } else if (G.stage === 'load') {
         poseT = 1; swingT = 1;
         if (G.t > 0.22 * up.reload) { G.t = 0; G.rounds++; sfx.insert(); updateAmmo(); }
-        if (G.rounds >= 6 || (G.interrupt && G.rounds > 0)) { G.stage = 'close'; G.t = 0; sfx.close(); }
+        if (G.rounds >= CAP() || (G.interrupt && G.rounds > 0)) { G.stage = 'close'; G.t = 0; sfx.close(); }
       } else if (G.stage === 'close') {
         poseT = 0.4; swingT = 0;
         if (G.t > 0.18 * up.reload) { G.state = 'idle'; G.stage = ''; G.cd = 0.05; }
@@ -1765,7 +1774,7 @@
     }
     G.pose = lerp(G.pose, poseT, damp(12, dt));
     G.swing = lerp(G.swing, swingT, damp(16, dt));
-    const wantAds = (inp.adsHeld || inp.adsToggle) && G.state !== 'reload' && !sprint ? 1 : 0;
+    const wantAds = (inp.adsHeld || inp.adsToggle || (CP.idx === 0 && keys.KeyV && !menuOpen)) && G.state !== 'reload' && !sprint ? 1 : 0;
     G.ads = lerp(G.ads, wantAds, damp(18, dt));
     G.recoil = lerp(G.recoil, 0, damp(10, dt));
     G.kick = lerp(G.kick, 0, damp(7, dt));
@@ -1793,7 +1802,7 @@
     gun.root.position.x *= CP.vxk; gun.root.position.y *= CP.vk; gun.root.scale.setScalar(CP.vk);
     gun.crane.rotation.z = G.swing * 1.2;
     gun.cylG.rotation.z = G.cylAngle;
-    gun.hammer.rotation.x = G.pull > 0 ? -0.9 * (1 - G.pull / 0.05) : 0;
+    gun.hammer.rotation.x = G.pull > 0 ? -0.9 * (1 - G.pull / 0.015) : 0;
     gun.trigger.rotation.x = 0.3 + (G.pull > 0 ? 0.35 : 0);
     camera.fov = lerp(CP.fov0, CP.fovAds, G.ads);
     camera.updateProjectionMatrix();
@@ -1826,36 +1835,47 @@
     star: new THREE.ExtrudeGeometry(starShape, { depth: 0.015, bevelEnabled: false }),
     droneHull: new THREE.SphereGeometry(0.3, 18, 12), droneRing: new THREE.TorusGeometry(0.33, 0.035, 6, 24),
     droneArm: new THREE.BoxGeometry(0.9, 0.04, 0.06), rotor: new THREE.BoxGeometry(0.4, 0.012, 0.05),
-    lens: new THREE.CylinderGeometry(0.085, 0.085, 0.05, 16), dgun: new THREE.CylinderGeometry(0.03, 0.035, 0.26, 10)
+    lens: new THREE.CylinderGeometry(0.085, 0.085, 0.05, 16), dgun: new THREE.CylinderGeometry(0.03, 0.035, 0.26, 10),
+    longCannon: new THREE.CylinderGeometry(0.03, 0.042, 0.78, 10), shield: new THREE.BoxGeometry(0.86, 1.05, 0.05),
+    bomb: new THREE.CylinderGeometry(0.11, 0.11, 0.36, 12)
   };
 
   // Colpi al busto necessari (danno base 55-61): Drone 1, Sentinella 2, Assaltatore 2, Corazzato 3
   const TYPES = {
-    drone:    { name: 'Drone', hp: 50, speed: 3.4, fireInt: 2.8, dmg: 5, bolt: 20, windup: 0.7, spread: 0.07, score: 60, pref: [7, 13], fly: true },
+    drone:    { name: 'Drone', hp: 50, speed: 3.0, fireInt: 2.8, dmg: 5, bolt: 20, windup: 0.7, spread: 0.07, score: 60, pref: [7, 13], fly: true },
     sentinel: { name: 'Sentinella', hp: 105, speed: 2.0, fireInt: 2.6, dmg: 7, bolt: 24, windup: 0.65, spread: 0.06, score: 100, pref: [13, 20], burst: 2 },
     assault:  { name: 'Assaltatore', hp: 108, speed: 4.4, fireInt: 1.8, dmg: 6, bolt: 26, windup: 0.45, spread: 0.05, score: 130, pref: [3, 6], pellets: 3 },
-    armored:  { name: 'Corazzato', hp: 160, speed: 1.5, fireInt: 3.0, dmg: 13, bolt: 19, windup: 0.85, spread: 0.035, score: 180, pref: [14, 22], big: true },
-    boss:     { name: 'Sceriffo di Ferro', hp: 1100, speed: 1.3, fireInt: 2.4, dmg: 11, bolt: 22, windup: 1.0, spread: 0.03, score: 1500, pref: [12, 20], pellets: 5, boss: true, big: true },
-    golden:   { name: 'Robot d\'oro', hp: 60, speed: 3.2, fireInt: 99, dmg: 0, bolt: 1, windup: 99, spread: 0, score: 300, pref: [0, 0], golden: true }
+    armored:  { name: 'Corazzato', hp: 160, speed: 1.9, fireInt: 3.0, dmg: 13, bolt: 19, windup: 0.85, spread: 0.035, score: 180, pref: [14, 22], big: true },
+    boss:     { name: 'Sceriffo di Ferro', hp: 1100, speed: 2.0, fireInt: 2.4, dmg: 12, bolt: 22, windup: 1.0, spread: 0.03, score: 1500, pref: [12, 20], pellets: 5, boss: true, big: true },
+    golden:   { name: 'Robot d\'oro', hp: 50, speed: 3.2, fireInt: 3.2, dmg: 3, bolt: 20, windup: 0.6, spread: 0.08, score: 300, pref: [0, 0], golden: true },
+    kamikaze: { name: 'Kamikaze', hp: 45, speed: 5.4, fireInt: 99, dmg: 30, bolt: 1, windup: 99, spread: 0, score: 90, pref: [0, 0], kami: true },
+    sniper:   { name: 'Cecchino', hp: 70, speed: 0, fireInt: 4.2, dmg: 25, bolt: 60, windup: 1.5, spread: 0.008, score: 200, pref: [0, 0], sniper: true },
+    shield:   { name: 'Scudato', hp: 150, speed: 2.2, fireInt: 3.0, dmg: 9, bolt: 24, windup: 0.8, spread: 0.05, score: 170, pref: [6, 10], shield: true, burst: 2 }
   };
+  const shieldMat = new THREE.MeshStandardMaterial({ color: L(0x3F5F80), metalness: 0.85, roughness: 0.35, emissive: L(0x123A66), emissiveIntensity: 0.25 });
   const LOOK = {
     sentinel: { scale: 1, body: 0xC9C2B0, armor: 0xB8733A, eye: 0xFF2A10, hat: 'cowboy', pads: true },
     assault:  { scale: 0.95, body: 0xA0503C, armor: 0x2E2E2E, eye: 0xFFD21A, hat: 'cap', pads: false, wide: true },
     armored:  { scale: 1.2, body: 0x5C6168, armor: 0x8A7658, eye: 0xFF2A10, hat: 'wide', pads: true, chest: true },
     boss:     { scale: 1.9, body: 0x3D3A36, armor: 0xC9A042, eye: 0xFF6A00, hat: 'tall', pads: true, chest: true, star: true },
     golden:   { scale: 0.95, body: 0xE8C25A, armor: 0xFFD978, eye: 0xFFFFFF, hat: 'cowboy', pads: false, gold: true },
-    drone:    { scale: 1, body: 0xB9BEC4, armor: 0xD06A2A, eye: 0x39D5FF }
+    drone:    { scale: 1.25, body: 0xB9BEC4, armor: 0xD06A2A, eye: 0x39D5FF },
+    kamikaze: { scale: 0.85, body: 0xB03A22, armor: 0x2A2A2A, eye: 0xFF3010, hat: 'cap', pads: false, bomb: true },
+    sniper:   { scale: 1, body: 0x4A5A48, armor: 0x2E3A2E, eye: 0xFF1010, hat: 'wide', pads: false, long: true },
+    shield:   { scale: 1.05, body: 0x55657A, armor: 0x39506A, eye: 0x39B8FF, hat: 'cap', pads: false, shield: true }
   };
 
   // Statistiche: la vita resta fissa per tipo, la difficoltà cresce con precisione, cadenza e velocità
+  // V08: dall'ondata 10 cresce anche la vita (non per Drone, Kamikaze e robot d'oro) e oltre la 21 cadenza e danno salgono ancora, piano
   function typeStats(type, w) {
-    const T = TYPES[type], k = w - 1;
+    const T = TYPES[type], k = w - 1, late = Math.max(0, w - 21);
     return {
-      hp: T.boss ? Math.round((T.hp + 300 * Math.max(0, Math.floor(w / 5) - 1)) * SC().boss) : T.hp,
+      hp: T.boss ? Math.round((T.hp + 300 * Math.max(0, Math.floor(w / 5) - 1)) * SC().boss)
+        : Math.round(T.hp * (T.fly || T.golden || T.kami ? 1 : 1 + 0.04 * Math.max(0, w - 9))),
       speed: T.speed * (1 + Math.min(0.25, 0.02 * k)) * rand(0.9, 1.1),
-      fireInt: T.fireInt * (1 - Math.min(0.35, 0.03 * k)),
+      fireInt: T.fireInt * (1 - Math.min(0.35, 0.03 * k)) * (1 - Math.min(0.2, 0.01 * late)),
       spread: T.spread * (1 - Math.min(0.5, 0.04 * k)),
-      dmg: T.dmg * (1 + Math.min(0.6, 0.03 * k)),
+      dmg: T.dmg * (1 + Math.min(0.6, 0.03 * k) + Math.min(0.4, 0.01 * late)),
       bolt: T.bolt * (1 + Math.min(0.3, 0.02 * k)),
       windup: T.windup * (1 - Math.min(0.3, 0.025 * k))
     };
@@ -1867,7 +1887,7 @@
       id: ++enemySeq, type, T, s, hp: s.hp, maxHp: s.hp, alive: true, parts: [], yaw: 0, fireCd: rand(1.5, 3), windup: 0, stun: 0, slow: 1, aimPen: 0, flash: 0,
       walk: rand(0, 6), strafe: Math.random() < 0.5 ? 1 : -1, strafeT: rand(1, 3), losT: rand(0, 0.25), los: false, stuckT: 0,
       detour: null, detourT: 0, lastPos: new V3(x, 0, z), dieT: 0, hatOff: false,
-      armor: { L: 3, R: 3, CL: 2, CR: 2, B: Infinity }, pref: rand(T.pref[0], T.pref[1]),
+      armor: { L: 3, R: 3, CL: 2, CR: 2, B: Infinity, S: T.shield ? 6 : Infinity }, pref: rand(T.pref[0], T.pref[1]),
       burst: 0, burstT: 0, life: 0, summoned: 0, scale: Lk.scale || 1, vy: 0, t0: rand(0, 6), plateOpenT: 0
     };
     let mBody, mArmor;
@@ -1962,7 +1982,10 @@
       mk(GEO.upper, mBody, sh, 0, -0.15, 0, 'limb', { arm: side });
       const el = new THREE.Group(); el.position.y = -0.3; sh.add(el);
       mk(GEO.joint, M.robotJoint, el, 0, 0, 0, 'limb', { arm: side });
-      if (side > 0) {
+      if (side > 0 && Lk.long) {
+        mk(GEO.longCannon, M.robotJoint, el, 0, -0.39, 0, 'limb', { arm: side });
+        e.muzzle = mk(GEO.tip, mCore, el, 0, -0.8, 0, null);
+      } else if (side > 0) {
         mk(Lk.wide ? GEO.wideCannon : GEO.cannon, M.robotJoint, el, 0, -0.18, 0, 'limb', { arm: side });
         e.muzzle = mk(GEO.tip, mCore, el, 0, -0.37, 0, null);
       } else {
@@ -1971,11 +1994,17 @@
       }
       e.arms.push({ sh, el, side });
     }
+    if (Lk.shield) {
+      // Scudo frontale: copre busto e mezza testa, lascia scoperte le gambe dal ginocchio in giù e si sposta di lato quando il robot spara
+      const sg = new THREE.Group(); sg.position.set(0, 0.25, 0); torso.add(sg); e.shieldG = sg;
+      mk(GEO.shield, shieldMat, sg, 0, 0, 0.44, 'shield', { pad: 'S' });
+    }
+    if (Lk.bomb) mk(GEO.bomb, mArmor, torso, 0, 0.3, -0.22, 'core');
   }
 
   function buildDrone(e, mk) {
     const { mBody, mArmor, mEye, mCore } = e.mats, b = e.body;
-    e.alt = rand(2.3, 3.4); b.position.y = e.alt;
+    e.alt = rand(1.9, 2.7); b.position.y = e.alt;
     const hull = mk(GEO.droneHull, mBody, b, 0, 0, 0, 'torso'); hull.scale.set(1, 0.6, 1.15);
     const ring = mk(GEO.droneRing, mArmor, b, 0, 0, 0, 'torso'); ring.rotation.x = Math.PI / 2;
     for (const r of [Math.PI / 4, 3 * Math.PI / 4]) { const a = mk(GEO.droneArm, M.robotJoint, b, 0, 0.04, 0, 'limb'); a.rotation.y = r; }
@@ -2047,6 +2076,13 @@
       }
       return;
     }
+    if (zone === 'shield') {
+      e.armor.S -= eff.pierce > 0 ? 3 : 1;
+      sparks(point, 8, 6); sfx.clang(); hitmark('');
+      if (e.armor.S <= 0) { breakPad(e, part, dir); popup('Scudo rotto', point, 'armor'); }
+      else popup('Scudo', point, 'armor');
+      return;
+    }
     if (zone === 'armor') {
       const k = part.userData.pad;
       e.armor[k] -= eff.pierce > 0 ? 2 : 1;
@@ -2101,9 +2137,11 @@
     e.mats.mEye.emissiveIntensity = 0; e.mats.mCore.emissiveIntensity = 0.2;
   }
 
-  let boomT = 0;
+  let boomT = 0, ricoBusy = false;
   function killEnemy(e, zone, dir, dist) {
     e.alive = false; e.dieT = 0; e.vy = 0;
+    dropLaser(e);
+    if (e.T.golden) syncGoldMarks(null);
     e.fallDir = Math.sign(-(dir.x * Math.sin(e.yaw) + dir.z * Math.cos(e.yaw))) || 1;
     if (net.mode === 'host') netAll({ t: 'kill', id: e.id, fd: e.fallDir });
     stats.kills++;
@@ -2111,9 +2149,10 @@
     if (!CP.remote) buzz(25);
     onKillExtras(e);
     const cp = new V3(); e.torso.getWorldPosition(cp); if (!e.T.fly) cp.y += 0.3 * e.scale;
-    addScore(e.T.score + 5 * wave, cp);
-    if (e.T.golden) medal('Robot d\'oro abbattuto!', 0);
-    if (zone === 'head') { stats.heads++; medal('Colpo in testa', 50); }
+    addScore(Math.round(e.T.score * (e.vet ? 1.5 : 1)) + 5 * wave, cp);
+    if (e.vet) medal('Veterano abbattuto', 0);
+    if (e.T.golden) medal('Robot d\'oro abbattuto alla tappa ' + ((e.cpi || 0) + 1), 0);
+    if (zone === 'head') { stats.heads++; medal('Colpo in testa', 50); if (up.cold) giveRound(); }
     else if (zone === 'core') medal('Nucleo centrato', 30);
     if (dist > 30) medal('Colpo da lontano', 40);
     if (clockT - stats.lastKill < 2.5) stats.multi++; else stats.multi = 1;
@@ -2122,6 +2161,27 @@
     else if (stats.multi === 3) medal('Tripletta', 200);
     else if (stats.multi >= 4) medal('Strage di ferraglia', 350);
     deathFx(e, cp, 1);
+    if (e.T.kami) kamiBlast(e, cp);
+    // Potenziamenti: cura a ogni abbattimento e rimbalzo sul robot più vicino
+    if (up.leech && !pl.down && !pl.dead) { pl.health = Math.min(pl.maxHp, pl.health + 3 * up.leech); updateHealth(); }
+    if (up.rico && !ricoBusy) {
+      ricoBusy = true;
+      const v = new V3();
+      let best = null, bd = 12;
+      for (const o of enemies) {
+        if (!o.alive || o.T.golden) continue;
+        o.torso.getWorldPosition(v);
+        const d = v.distanceTo(cp);
+        if (d < bd) { bd = d; best = o; }
+      }
+      if (best) {
+        best.torso.getWorldPosition(v);
+        const dmg = Math.round(BASE_DMG * up.dmg * 0.4 * up.rico);
+        best.hp -= dmg; best.flash = 0.1; popup(String(dmg), v, 'hat'); sparks(v, 8, 6);
+        if (best.hp <= 0) killEnemy(best, 'torso', v.clone().sub(cp).normalize(), 0);
+      }
+      ricoBusy = false;
+    }
     if (e.T.boss) {
       banner('Sceriffo di Ferro abbattuto<small>La città respira, per ora</small>', 3200);
       $('bossBox').hidden = true;
@@ -2134,6 +2194,7 @@
   function escapeGolden(e) {
     e.alive = false;
     scene.remove(e.root);
+    syncGoldMarks(null);
     toast('Il robot d\'oro è fuggito');
     refreshShootables();
   }
@@ -2154,30 +2215,33 @@
     const t = m.distanceTo(target) / e.s.bolt;
     target.x += pl.vel.x * t * 0.5; target.z += pl.vel.z * t * 0.5;
     const base = target.sub(m).normalize();
-    const n = e.T.pellets || 1, fan = e.T.boss ? 0.13 : 0.09;
+    const single = e.shotMode === 'single';
+    const n = single ? 1 : (e.T.pellets || 1), fan = e.T.boss ? 0.13 : 0.09;
     for (let i = 0; i < n; i++) {
       const dir = base.clone();
       if (n > 1) {
         const a = (i - (n - 1) / 2) * fan, c = Math.cos(a), s = Math.sin(a);
         const x = dir.x * c - dir.z * s, z = dir.x * s + dir.z * c; dir.x = x; dir.z = z;
       }
-      const sp = e.s.spread + e.aimPen;
+      const sp = (e.s.spread + e.aimPen) * (single ? 0.5 : 1);
       dir.x += rand(-sp, sp); dir.y += rand(-sp, sp) * 0.6; dir.z += rand(-sp, sp);
       dir.normalize();
-      spawnBolt(m, dir, e.s.bolt, e.s.dmg, e.T.big ? 1.7 : 1);
+      // Il colpo del Corazzato esplode all'impatto
+      spawnBolt(m, dir, e.s.bolt * (single ? 1.25 : 1), e.s.dmg * (single ? 1.4 : 1), e.T.big ? 1.7 : 1, e.type === 'armored' ? 2.2 : 0);
     }
     sfx.zap(clamp(1 - m.distanceTo(pl.pos) / 60, 0.15, 1));
   }
 
   const bolts = [];
   const boltGeo = new THREE.SphereGeometry(0.06, 8, 6);
-  function spawnBolt(p, dir, speed, dmg, size) {
+  // splash = raggio dell'esplosione all'impatto (0 = nessuna), life = durata del volo in secondi
+  function spawnBolt(p, dir, speed, dmg, size, splash, life) {
     const m = new THREE.Mesh(boltGeo, M.bolt);
     m.scale.set(size, size, 6 * size);
     m.position.copy(p); m.lookAt(p.clone().add(dir));
     scene.add(m);
-    bolts.push({ m, v: dir.clone().multiplyScalar(speed), dmg, life: 4 });
-    if (net.mode === 'host') netAll({ t: 'bolt', p: [r2(p.x), r2(p.y), r2(p.z)], v: [r2(dir.x * speed), r2(dir.y * speed), r2(dir.z * speed)], s: size });
+    bolts.push({ m, v: dir.clone().multiplyScalar(speed), dmg, life: life || 4, splash: splash || 0 });
+    if (net.mode === 'host') netAll({ t: 'bolt', p: [r2(p.x), r2(p.y), r2(p.z)], v: [r2(dir.x * speed), r2(dir.y * speed), r2(dir.z * speed)], s: size, x: splash || 0, l: r2(life || 4) });
   }
 
   function animateHumanoid(e, dt, moving, dist) {
@@ -2192,7 +2256,7 @@
     e.torso.rotation.x = e.type === 'assault' && moving ? 0.18 : 0;
     const aimPitch = Math.atan2(pl.pos.y + 1.3 - (pos.y + 1.5 * e.scale), dist);
     const ra = e.arms[1], la = e.arms[0];
-    const armAim = (e.los && e.stun <= 0 && !e.T.golden) ? -Math.PI / 2 - aimPitch : -0.25;
+    const armAim = (e.los && e.stun <= 0 && !e.T.kami) ? -Math.PI / 2 - aimPitch : -0.25;
     ra.sh.rotation.x = lerp(ra.sh.rotation.x, armAim, damp(8, dt));
     la.sh.rotation.x = moving ? Math.sin(e.walk + Math.PI) * 0.35 : lerp(la.sh.rotation.x, 0, damp(6, dt));
     la.el.rotation.x = -0.3;
@@ -2203,6 +2267,7 @@
     const T = e.T;
     if (!e.alive) {
       e.dieT += dt;
+      if (e.laser) dropLaser(e);
       if (T.fly) {
         e.vy -= 12 * dt;
         e.body.position.y = Math.max(0.2, e.body.position.y + e.vy * dt);
@@ -2227,19 +2292,29 @@
     if (e.flash > 0) e.flash -= dt;
     e.mats.mBody.emissive.setScalar(e.flash > 0 ? 0.5 : 0);
     const nx = dx / dist, nz = dz / dist;
+    if (T.sniper) return updateSniper(e, dt, dist);
+    if (T.kami) return updateKami(e, dt, nx, nz, dist);
     let mx = 0, mz = 0;
     if (T.golden) {
-      // Il robot d'oro scappa e sparisce dopo 16 secondi
-      mx = -nx + Math.sin(e.life * 1.3 + e.t0) * 0.9; mz = -nz + Math.cos(e.life * 1.1 + e.t0) * 0.7;
-      const m = Math.hypot(mx, mz) || 1; mx /= m; mz /= m;
+      // Il robot d'oro segue un percorso a tappe: a ogni tappa superata il premio scende
+      const c = e.cp && e.cp[e.cpi];
+      if (!c || e.life > 75) { escapeGolden(e); return false; }
+      const gx = c.x - pos.x, gz = c.z - pos.z, gd = Math.hypot(gx, gz) || 0.001;
+      if (gd < 1.3) {
+        e.cpi++;
+        if (e.cpi >= e.cp.length) { escapeGolden(e); return false; }
+        toast('Il robot d\'oro ha superato la tappa ' + e.cpi + ' di ' + e.cp.length + ': premio ridotto', 2400);
+        syncGoldMarks(e.cp, e.cpi);
+      }
+      if (e.detourT > 0) { e.detourT -= dt; mx = e.detour.x; mz = e.detour.z; }
+      else { mx = gx / gd; mz = gz / gd; }
       e.yaw += angDiff(Math.atan2(mx, mz), e.yaw) * damp(6, dt);
-      if (e.life > 22) { escapeGolden(e); return false; }
     } else {
       e.yaw += angDiff(Math.atan2(dx, dz), e.yaw) * damp(e.stun > 0 ? 1 : 6, dt);
       if (e.detourT > 0) { e.detourT -= dt; mx = e.detour.x; mz = e.detour.z; }
       else if (!e.los || dist > e.pref) {
         mx = nx; mz = nz;
-        if (e.type === 'assault' || T.fly) { const zz = Math.sin(e.life * 3 + e.t0) * 0.8; mx += -nz * zz; mz += nx * zz; }
+        if (e.type === 'assault' || T.fly) { const zz = Math.sin(e.life * (T.fly ? 2 : 3) + e.t0) * (T.fly ? 0.45 : 0.8); mx += -nz * zz; mz += nx * zz; }
       } else {
         e.strafeT -= dt;
         if (e.strafeT <= 0) { e.strafeT = rand(1.2, 3); e.strafe *= -1; }
@@ -2249,7 +2324,8 @@
       const m = Math.hypot(mx, mz); if (m > 1) { mx /= m; mz /= m; }
     }
     e.root.rotation.y = e.yaw;
-    const spd = e.s.speed * e.slow * (e.stun > 0 ? 0.2 : 1) * (e.windup > 0 ? 0.35 : 1);
+    // Il Drone si ferma in aria mentre carica il colpo: è il momento per colpirlo
+    const spd = e.s.speed * e.slow * (e.stun > 0 ? 0.2 : 1) * (e.windup > 0 ? (T.fly ? 0.05 : 0.35) : 1);
     pos.x += mx * spd * dt; pos.z += mz * spd * dt;
     for (const o of enemies) {
       if (o === e || !o.alive || !!o.T.fly !== !!T.fly) continue;
@@ -2277,7 +2353,10 @@
       }
       animateHumanoid(e, dt, (mx || mz) ? spd : 0, dist);
     }
-    if (T.golden) return true;
+    if (e.shieldG) {
+      if (e.plateOpenT > 0) e.plateOpenT -= dt;
+      e.shieldG.rotation.y = lerp(e.shieldG.rotation.y, (e.windup > 0 || e.plateOpenT > 0) ? 1.35 : 0, damp(10, dt));
+    }
     // Raffica della Sentinella
     if (e.burst > 0) { e.burstT -= dt; if (e.burstT <= 0) { e.burst--; e.burstT = 0.2; enemyShoot(e); } }
     // Fuoco con preavviso visivo (l'occhio si illumina)
@@ -2289,9 +2368,19 @@
       if (T.boss && e.plates) e.plates.forEach((p) => { p.position.x = Math.sign(p.position.x || 1) * (0.062 + 0.13 * Math.min(1, k * 2)); });
       if (e.windup <= 0) {
         e.muzzle.scale.setScalar(1);
-        enemyShoot(e);
-        if (T.burst) { e.burst = T.burst - 1; e.burstT = 0.2; }
-        if (T.boss) e.plateOpenT = 0.9;
+        if (T.boss) {
+          // Lo Sceriffo alterna tre attacchi: ventaglio, raffica mirata, mortaio
+          const a = (e.atk || 0) % 3;
+          e.atk = a + 1;
+          if (a === 0) { e.shotMode = 'fan'; enemyShoot(e); }
+          else if (a === 1) { e.shotMode = 'single'; enemyShoot(e); e.burst = 2; e.burstT = 0.18; }
+          else bossMortar(e);
+          e.plateOpenT = 0.9;
+        } else {
+          enemyShoot(e);
+          if (T.burst) { e.burst = T.burst - 1; e.burstT = 0.2; }
+          if (T.shield) e.plateOpenT = 0.7;
+        }
       }
     } else {
       if (T.boss && e.plates) {
@@ -2302,7 +2391,7 @@
       e.fireCd -= dt;
       const range = e.type === 'assault' ? 16 : 45;
       if (e.fireCd <= 0 && e.los && dist < range && e.stun <= 0) {
-        e.windup = e.s.windup; e.fireCd = e.s.fireInt * rand(0.8, 1.25);
+        e.windup = e.s.windup; e.fireCd = e.s.fireInt * rand(0.8, 1.25) * (T.boss && e.hp / e.maxHp < 0.33 ? 0.7 : 1);
         sfx.windup(clamp(1 - dist / 40, 0.2, 1));
       }
     }
@@ -2321,14 +2410,19 @@
   // ================= Ondate con composizione casuale =================
   let wave = 0, spawnQueue = [], spawnT = 0, interT = 0, inIntermission = false, waveDamage = 0;
   function hostileAlive() { let n = 0; for (const e of enemies) if (e.alive && !e.T.golden) n++; return n; }
+  // Composizione: la Sentinella è il nemico base, gli altri tipi entrano e crescono con le ondate
   function pickType(w) {
-    const W = [['drone', 3], ['sentinel', 3], ['assault', w >= 3 ? 1 + 0.3 * w : 0], ['armored', w >= 4 ? 0.5 + 0.25 * w : 0]];
+    const W = [['sentinel', Math.max(1.2, 4 - 0.12 * w)], ['drone', w >= 2 ? Math.min(3, 1 + 0.25 * w) : 0],
+      ['assault', w >= 3 ? Math.min(6, 1 + 0.3 * w) : 0], ['armored', w >= 4 ? Math.min(5, 0.5 + 0.25 * w) : 0],
+      ['kamikaze', w >= 5 ? Math.min(3, 0.8 + 0.12 * w) : 0], ['sniper', w >= 6 ? 1.2 : 0], ['shield', w >= 8 ? Math.min(4, 0.6 + 0.2 * w) : 0]];
     let tot = 0; W.forEach((x) => { tot += x[1]; });
     let r = Math.random() * tot;
     for (const [t, wt] of W) { r -= wt; if (r <= 0) return t; }
     return 'sentinel';
   }
   function spawnAt(type) {
+    let roof = null;
+    if (type === 'sniper') { roof = freeRoof(null); if (!roof) type = 'sentinel'; }
     let x = 0, z = 0;
     for (let i = 0; i < 14; i++) {
       const a = rand(0, Math.PI * 2), r = type === 'golden' ? rand(14, 30) : rand(36, 47);
@@ -2338,11 +2432,22 @@
     const p = new V3(x, 0, z);
     circleVsBoxes(p, 0.8, 0);
     const e = makeEnemy(type, wave, p.x, p.z);
+    if (roof) placeOnRoof(e, roof);
+    // Veterani dall'ondata 15: più vita e più punti
+    if (!e.T.boss && !e.T.golden && !e.T.fly && !e.T.kami && wave >= 15 && Math.random() < Math.min(0.3, 0.05 + 0.01 * (wave - 15))) {
+      e.hp = e.maxHp = Math.round(e.hp * 1.5); addVetMark(e);
+    }
     if (type === 'boss') {
       $('bossBox').hidden = false; $('bossFill').style.width = '100%';
       banner('Lo Sceriffo di Ferro<small>Colpisci il nucleo quando apre la corazza</small>', 3500);
     }
-    if (type === 'golden') toast('Un robot d\'oro! Abbattilo prima che fugga', 3000);
+    if (type === 'golden') {
+      e.cp = goldRoute(p.x, p.z); e.cpi = 0;
+      syncGoldMarks(e.cp, 0);
+      toast('Un robot d\'oro! Abbattilo prima che superi le tappe', 3000);
+      // Dall'ondata 8 lo accompagna una scorta di due Sentinelle
+      if (wave >= 8) for (const s of [-1, 1]) makeEnemy('sentinel', wave, p.x + s * 1.6, p.z + 0.8);
+    }
     return e;
   }
   function startWave() {
@@ -2351,11 +2456,13 @@
     const bossWave = wave % 5 === 0;
     if (bossWave) {
       spawnQueue.push('boss');
-      for (let i = 0; i < Math.round((2 + wave / 5) * SC().count); i++) spawnQueue.push('drone');
+      for (let i = 0; i < Math.round((2 + wave / 5) * SC().count); i++) spawnQueue.push(wave >= 10 && i % 2 ? pickType(wave) : 'drone');
     } else {
       const n = Math.min(Math.round(Math.min(4 + wave, 22) * SC().count), 40);
       for (let i = 0; i < n; i++) spawnQueue.push(pickType(wave));
       for (let i = spawnQueue.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [spawnQueue[i], spawnQueue[j]] = [spawnQueue[j], spawnQueue[i]]; }
+      let sn = 0;
+      spawnQueue = spawnQueue.map((t) => (t === 'sniper' && ++sn > 3 ? 'sentinel' : t)); // al massimo 3 Cecchini per ondata
     }
     spawnT = 0.8;
     const n = spawnQueue.filter((t) => t !== 'golden').length;
@@ -2363,6 +2470,7 @@
     sfx.bell();
     $('waveLbl').textContent = 'Ondata ' + wave;
     placeBottles();
+    if (up.plate) forPlayers(() => { if (pl.shield < 15 * up.plate) { pl.shield = 15 * up.plate; updateHealth(); } });
     setupWaveExtras(bossWave);
     updateEnemyLbl();
   }
@@ -2370,11 +2478,16 @@
     if (inIntermission) { interT -= dt; if (interT <= 0) { autoPickUpgrade(); startWave(); } return; }
     waveTimers(dt);
     spawnT -= dt;
-    const maxAlive = Math.min(Math.min(2 + Math.ceil(wave / 2), 7) + SC().alive, 12);
-    if (spawnQueue.length && spawnT <= 0 && (hostileAlive() < maxAlive || spawnQueue[0] === 'golden')) {
-      spawnAt(spawnQueue.shift());
-      spawnT = rand(0.9, 2.0);
-      updateEnemyLbl();
+    // Robot vivi insieme: fino a 7, poi +1 ogni 6 ondate dalla 18 (10 all'ondata 30), più quelli per i giocatori in più
+    const maxAlive = Math.min(Math.min(2 + Math.ceil(wave / 2), 7) + clamp(Math.floor((wave - 12) / 6), 0, 3) + SC().alive, 14);
+    if (spawnQueue.length && spawnT <= 0 && hostileAlive() < maxAlive) {
+      // Limiti per tipo: Assaltatori 4 (+1 per ogni giocatore in più), Cecchini 2 (3 con tre o più giocatori)
+      const cnt = (t) => { let n = 0; for (const e of enemies) if (e.alive && e.type === t) n++; return n; };
+      const capA = 3 + players.length, capS = players.length >= 3 ? 3 : 2;
+      const na = cnt('assault'), ns = cnt('sniper');
+      const i = spawnQueue.findIndex((t) => !(t === 'assault' && na >= capA) && !(t === 'sniper' && ns >= capS));
+      if (i >= 0) { spawnAt(spawnQueue.splice(i, 1)[0]); spawnT = rand(0.9, 2.0); updateEnemyLbl(); }
+      else spawnT = 0.5;
     }
     if (!spawnQueue.length && hostileAlive() === 0) {
       inIntermission = true; interT = 10;
@@ -2402,7 +2515,7 @@
 
   // ================= V03: oggetti, potenziamenti, eventi, mira concentrata =================
   let eff = { pierce: 0, explo: 0, boots: 0 };
-  const up = { dmg: 1, reload: 1, rate: 1, spread: 1, dur: 1, regen: 1, head: 0, level: {} };
+  const up = { dmg: 1, reload: 1, rate: 1, spread: 1, dur: 1, regen: 1, head: 0, drum: 0, cold: 0, rico: 0, leech: 0, plate: 0, magnet: 0, level: {} };
   let focus = 0, focusT = 0, stormT = 0, eventT = -1, goldenT = -1, pickupT = 8, bounty = null, bountyT = 0, upgradeChoices = null, hudT = 0;
   const PICK = {
     medkit: { name: 'Kit medico +40', color: 0x4CD964, w: 3 },
@@ -2415,7 +2528,7 @@
     coin: { name: 'Pepita d\'oro', color: 0xFFD447, w: 2 },
     star: { name: 'Stella dello sceriffo: +1 vita', color: 0xFFE27A, w: 0.5 }
   };
-  const DROP = { drone: 0.2, sentinel: 0.3, assault: 0.3, armored: 0.5, boss: 1, golden: 1 };
+  const DROP = { drone: 0.2, sentinel: 0.3, assault: 0.3, armored: 0.5, boss: 1, golden: 1, kamikaze: 0.15, sniper: 0.5, shield: 0.45 };
   const pickups = [];
   const beamGeo = new THREE.CylinderGeometry(0.18, 0.18, 7, 8, 1, true);
   const ringGeo = new THREE.TorusGeometry(0.55, 0.05, 6, 28);
@@ -2465,14 +2578,14 @@
     pickups.push(rec);
     return rec;
   }
-  function giveLoader() { G.rounds = 6; if (G.state === 'reload') { G.state = 'idle'; G.stage = ''; } G.cd = 0; updateAmmo(); sfx.close(); }
+  function giveLoader() { G.rounds = CAP(); if (G.state === 'reload') { G.state = 'idle'; G.stage = ''; } G.cd = 0; updateAmmo(); sfx.close(); }
   function applyPickup(type, pos) {
     const D = 20 * up.dur;
     if (type === 'medkit') { pl.health = Math.min(pl.maxHp, pl.health + 40); updateHealth(); }
     else if (type === 'loader') { if (CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'loader' }); } else giveLoader(); }
-    else if (type === 'shield') { pl.shield = 50; updateHealth(); }
+    else if (type === 'shield') { pl.shield = Math.min(150, pl.shield + 50); updateHealth(); } // le Placche si sommano fino a 150
     else if (type === 'pierce') eff.pierce = D;
-    else if (type === 'explo') eff.explo = 6;
+    else if (type === 'explo') eff.explo = Math.min(24, eff.explo + 6); // i colpi esplosivi si sommano fino a 24
     else if (type === 'boots') eff.boots = D;
     else if (type === 'focus') { focus = 100; updateFocusHud(); }
     else if (type === 'star') { lives = Math.min(MAX_LIVES, lives + 1); updateLives(); }
@@ -2494,6 +2607,12 @@
       e.torso.getWorldPosition(v);
       const d = v.distanceTo(p);
       if (d < 3.5) {
+        if (e.armor.S > 0 && e.armor.S !== Infinity) {
+          // L'esplosione rompe lo scudo dello Scudato
+          const sp = e.parts.find((o) => o.userData.pad === 'S');
+          e.armor.S = 0;
+          if (sp && sp.userData.active !== false) breakPad(e, sp, v.clone().sub(p).normalize());
+        }
         const dmg = Math.round(70 * (1 - d / 3.5) * up.dmg);
         if (dmg <= 0) continue;
         e.hp -= dmg; e.flash = 0.1; popup(String(dmg), v, 'crit');
@@ -2562,7 +2681,13 @@
   function onKillExtras(e) {
     const p = e.root.position;
     if (e.T.boss) { for (let i = 0; i < 3; i++) spawnPickup(null, p.x + rand(-2, 2), p.z + rand(-2, 2)); }
-    else if (e.T.golden) { spawnPickup('coin', p.x + 0.8, p.z); spawnPickup(null, p.x - 0.8, p.z); }
+    else if (e.T.golden) {
+      // Premio in base alla tappa: prima viene abbattuto, più è ricco
+      const st = e.cpi || 0;
+      spawnPickup('coin', p.x + 0.8, p.z);
+      if (st === 0) spawnPickup(lives < MAX_LIVES ? 'star' : 'coin', p.x, p.z + 0.9);
+      for (let i = 0; i < Math.max(0, 2 - Math.max(0, st - 1)) - (st >= 3 ? 1 : 0); i++) spawnPickup(null, p.x - 0.8 - i * 0.9, p.z);
+    }
     else if (Math.random() < Math.min(1, DROP[e.type] * SC().drop)) spawnPickup(null, p.x, p.z);
     if (e === bounty) {
       medal('Taglia riscossa', 250);
@@ -2581,10 +2706,16 @@
     { id: 'spread', name: 'Occhio di falco', desc: 'Dispersione -30%', apply() { up.spread *= 0.7; } },
     { id: 'dur', name: 'Tasche capienti', desc: 'Effetti degli oggetti +50% durata', apply() { up.dur *= 1.5; } },
     { id: 'regen', name: 'Scorza del deserto', desc: 'Rigenerazione vita +50%', apply() { up.regen *= 1.5; } },
-    { id: 'head', name: 'Occhio del pistolero', desc: 'Colpi in testa x3,5 invece di x3', apply() { up.head += 0.5; }, once: true }
+    { id: 'head', name: 'Occhio del pistolero', desc: 'Colpi in testa x3,5 invece di x3', apply() { up.head += 0.5; }, once: true },
+    { id: 'drum', name: 'Tamburo maggiorato', desc: '+1 colpo nel tamburo', apply() { up.drum += 1; }, max: 2 },
+    { id: 'cold', name: 'Sangue freddo', desc: 'Un abbattimento in testa restituisce 1 colpo', apply() { up.cold = 1; }, once: true },
+    { id: 'rico', name: 'Rimbalzo', desc: 'Il colpo che abbatte rimbalza sul robot vicino (+40% del danno)', apply() { up.rico += 1; } },
+    { id: 'leech', name: 'Ferraglia utile', desc: 'Ogni abbattimento cura 3 punti vita', apply() { up.leech += 1; } },
+    { id: 'plate', name: 'Placca di serie', desc: '+15 di Placca a inizio ondata', apply() { up.plate += 1; forPlayers(() => { if (pl.shield < 15 * up.plate) { pl.shield = 15 * up.plate; updateHealth(); } }); } },
+    { id: 'magnet', name: 'Calamita', desc: 'Raccogli gli oggetti da più lontano', apply() { up.magnet += 1; }, max: 2 }
   ];
   function offerUpgrades() {
-    const pool = UPG.filter((u) => !(u.once && up.level[u.id])).sort(() => Math.random() - 0.5);
+    const pool = UPG.filter((u) => !(u.once && up.level[u.id]) && !(u.max && (up.level[u.id] || 0) >= u.max)).sort(() => Math.random() - 0.5);
     upgradeChoices = pool.slice(0, 3);
     const box = $('upgCards'); box.innerHTML = '';
     upgradeChoices.forEach((u, i) => {
@@ -2612,11 +2743,261 @@
     return ZONE_MULT[zone];
   }
 
+
+  // ================= V08: nuovi robot, attacchi ad area, tappe del robot d'oro =================
+  const CAP = () => 6 + (up.drum || 0); // colpi nel tamburo
+  // Colpo restituito al tamburo (potenziamento Sangue freddo)
+  function giveRound() {
+    if (CP.remote) { if (CP.conn) netSend(CP.conn, { t: 'round' }); return; }
+    if (G.rounds < CAP()) { G.rounds++; updateAmmo(); }
+  }
+  // Segno dei robot veterani: anello dorato ai piedi
+  function addVetMark(e) {
+    if (e.vetMark) return;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.035, 6, 28), new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 2, 0.4) }));
+    ring.rotation.x = Math.PI / 2; ring.position.y = 0.06;
+    e.root.add(ring); e.vetMark = ring; e.vet = true;
+  }
+  // Raggio di mira del Cecchino, visibile a tutti
+  const laserMat = new THREE.LineBasicMaterial({ color: new THREE.Color(6, 0.4, 0.25), transparent: true, opacity: 0.85, fog: false });
+  function setLaser(e, to) {
+    if (!to) { if (e.laser) { e.laser.visible = false; e.glint.visible = false; } return; }
+    if (!e.laser) {
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
+      e.laser = new THREE.Line(g, laserMat);
+      e.laser.frustumCulled = false;
+      scene.add(e.laser);
+      // Bagliore rosso alla canna: chi è preso di mira vede il raggio di punta, quindi serve un segnale evidente
+      e.glint = new THREE.Sprite(new THREE.SpriteMaterial({ map: texSoft, color: new THREE.Color(3, 0.25, 0.15), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+      scene.add(e.glint);
+    }
+    const m = new V3(); e.muzzle.getWorldPosition(m);
+    const a = e.laser.geometry.attributes.position;
+    a.setXYZ(0, m.x, m.y, m.z); a.setXYZ(1, to.x, to.y, to.z); a.needsUpdate = true;
+    e.laser.visible = true;
+    e.glint.position.copy(m);
+    e.glint.scale.setScalar(0.5 + m.distanceTo(P0.camera.position) * 0.035 * (1 + 0.3 * Math.sin(clockT * 30)));
+    e.glint.visible = true;
+  }
+  function dropLaser(e) { if (e.laser) { scene.remove(e.laser); scene.remove(e.glint); e.laser.geometry.dispose(); e.laser = null; e.glint = null; } }
+
+  // Posti sui tetti dei portici per i Cecchini
+  function freeRoof(except) {
+    const free = roofSpots.filter((r) => r !== except && !enemies.some((o) => o.alive && o.roof === r));
+    return free.length ? free[(Math.random() * free.length) | 0] : null;
+  }
+  function placeOnRoof(e, r) {
+    e.roof = r; e.shotsHere = 0;
+    e.root.position.set(r.x + rand(-r.w, r.w), r.y, r.z);
+  }
+  const sniperRay = new THREE.Raycaster();
+  function updateSniper(e, dt, dist) {
+    const pos = e.root.position;
+    e.yaw += angDiff(Math.atan2(pl.pos.x - pos.x, pl.pos.z - pos.z), e.yaw) * damp(e.stun > 0 ? 1 : 5, dt);
+    e.root.rotation.y = e.yaw;
+    animateHumanoid(e, dt, 0, dist);
+    if (e.windup > 0) {
+      e.windup -= dt;
+      const k = 1 - e.windup / e.s.windup;
+      e.mats.mEye.emissiveIntensity = 3 + k * 9;
+      // Il raggio segue il bersaglio e si blocca negli ultimi 0,3 secondi: muoversi o coprirsi fa mancare il colpo
+      if (e.windup > 0.3 || !e.lockPt) e.lockPt = new V3(pl.pos.x, pl.pos.y + 1.2, pl.pos.z);
+      setLaser(e, e.lockPt);
+      if (e.stun > 0) { e.windup = 0; setLaser(e, null); }
+      else if (e.windup <= 0) {
+        setLaser(e, null);
+        const m = new V3(); e.muzzle.getWorldPosition(m);
+        const dir = e.lockPt.clone().sub(m).normalize();
+        dir.x += rand(-e.s.spread, e.s.spread); dir.y += rand(-e.s.spread, e.s.spread) * 0.6; dir.z += rand(-e.s.spread, e.s.spread);
+        dir.normalize();
+        sniperRay.set(m, dir); sniperRay.far = 200;
+        const hit = sniperRay.intersectObjects(solids, false)[0];
+        spawnBolt(m, dir, e.s.bolt, e.s.dmg, 1.4, 0, hit ? hit.distance / e.s.bolt : 3);
+        sfx.zap(clamp(1.4 - m.distanceTo(P0.pl.pos) / 80, 0.3, 1.4));
+        e.lockPt = null;
+        e.shotsHere++;
+        if (e.shotsHere >= 2) {
+          // Cambio di tetto dopo due colpi
+          const r = freeRoof(e.roof);
+          if (r) {
+            const from = pos.clone(); from.y += 1;
+            puff(from, L(0x6A6258), 0.9, 0.9, 0.8, 4);
+            placeOnRoof(e, r);
+            const to = pos.clone(); to.y += 1;
+            puff(to, L(0x6A6258), 0.9, 0.9, 0.8, 4);
+            e.fireCd += 1.2;
+          } else e.shotsHere = 0;
+        }
+      }
+    } else {
+      setLaser(e, null);
+      e.mats.mEye.emissiveIntensity = lerp(e.mats.mEye.emissiveIntensity, 3, damp(10, dt));
+      e.fireCd -= dt;
+      if (e.fireCd <= 0 && e.los && dist < 70 && e.stun <= 0) {
+        e.windup = e.s.windup; e.fireCd = e.s.fireInt * rand(0.85, 1.2); e.lockPt = null;
+        sfx.windup(clamp(1.2 - dist / 60, 0.3, 1));
+      }
+    }
+    return true;
+  }
+
+  // Kamikaze: corre sul bersaglio ed esplode da vicino; se abbattuto, l'esplosione colpisce i robot vicini
+  function updateKami(e, dt, nx, nz, dist) {
+    const pos = e.root.position;
+    e.yaw += angDiff(Math.atan2(nx, nz), e.yaw) * damp(e.stun > 0 ? 1 : 8, dt);
+    e.root.rotation.y = e.yaw;
+    let mx = nx, mz = nz;
+    if (e.detourT > 0) { e.detourT -= dt; mx = e.detour.x; mz = e.detour.z; }
+    else { const zz = Math.sin(e.life * 2.2 + e.t0) * 0.3; mx += -nz * zz; mz += nx * zz; }
+    const spd = e.s.speed * e.slow * (e.stun > 0 ? 0.2 : 1);
+    pos.x += mx * spd * dt; pos.z += mz * spd * dt;
+    circleVsBoxes(pos, 0.4 * e.scale, pos.y);
+    pos.y = lerp(pos.y, groundAt(pos.x, pos.z, pos.y), damp(12, dt));
+    e.stuckT += dt;
+    if (e.stuckT > 0.8) {
+      if (pos.distanceTo(e.lastPos) < 0.4) {
+        const a = Math.atan2(mx, mz) + (Math.random() < 0.5 ? 1 : -1) * rand(1.2, 1.9);
+        e.detour = { x: Math.sin(a), z: Math.cos(a) }; e.detourT = rand(0.6, 1.2);
+      }
+      e.lastPos.copy(pos); e.stuckT = 0;
+    }
+    animateHumanoid(e, dt, spd, dist);
+    kamiBlink(e, dist, dt);
+    if (dist < 2.0 && Math.abs(pl.pos.y - pos.y) < 2.2) { kamiDetonate(e); return true; }
+    return true;
+  }
+  // Lampeggio e segnale sonoro sempre più rapidi avvicinandosi
+  function kamiBlink(e, dist, dt) {
+    const rate = clamp(14 - dist * 0.5, 3, 14);
+    e.blinkT = (e.blinkT || 0) + dt * rate;
+    const on = Math.sin(e.blinkT) > 0;
+    e.mats.mEye.emissiveIntensity = on ? 12 : 1.5;
+    e.mats.mCore.emissiveIntensity = on ? 9 : 1;
+    if (on && !e.blinkOn) {
+      const d = Math.hypot(e.root.position.x - P0.pl.pos.x, e.root.position.z - P0.pl.pos.z);
+      if (d < 22) osc('square', 1500, 1300, 0.05, 0.05 * clamp(1 - d / 22, 0.1, 1));
+    }
+    e.blinkOn = on;
+  }
+  function kamiDetonate(e) {
+    e.alive = false; e.dieT = 99; e.vy = 0; e.fallDir = 1;
+    const cp = e.root.position.clone(); cp.y += 1;
+    if (net.mode === 'host') { netAll({ t: 'kill', id: e.id, fd: 1 }); netAll({ t: 'boom', p: [r2(cp.x), r2(cp.y), r2(cp.z)] }); }
+    boomFx(cp);
+    const was = CP;
+    for (const P of players) {
+      if (P.pl.down || P.pl.dead) continue;
+      const d = Math.hypot(P.pl.pos.x - cp.x, P.pl.pos.z - cp.z);
+      if (d < 3 && Math.abs(P.pl.pos.y - e.root.position.y) < 2.5) { usePlayer(P); hurtPlayer(e.s.dmg * (1 - 0.5 * d / 3), cp); }
+    }
+    usePlayer(was);
+    scene.remove(e.root);
+    refreshShootables();
+    updateEnemyLbl();
+  }
+  // Esplosione del Kamikaze abbattuto: danneggia i robot vicini, a favore di chi ha sparato
+  function kamiBlast(e, cp) {
+    boomFx(cp);
+    if (net.mode === 'host') netAll({ t: 'boom', p: [r2(cp.x), r2(cp.y), r2(cp.z)] });
+    const v = new V3();
+    for (const o of enemies) {
+      if (!o.alive || o === e || o.T.golden) continue;
+      o.torso.getWorldPosition(v);
+      const d = v.distanceTo(cp);
+      if (d >= 3.5) continue;
+      const dmg = Math.round(80 * (1 - d / 3.5));
+      if (dmg <= 0) continue;
+      o.hp -= dmg; o.flash = 0.1; popup(String(dmg), v, 'crit');
+      if (o.hp <= 0) killEnemy(o, 'torso', v.clone().sub(cp).normalize(), 0);
+    }
+  }
+
+  // Colpi di mortaio dello Sceriffo: un cerchio a terra avvisa dove cadranno
+  const mortars = [];
+  const mortarRingGeo = new THREE.TorusGeometry(1, 0.04, 6, 40), mortarDiscGeo = new THREE.CircleGeometry(1, 32);
+  function addMortar(x, z, t, dmg, r) {
+    const g = new THREE.Group();
+    g.position.set(x, groundAt(x, z, 0.5) + 0.05, z);
+    const ring = new THREE.Mesh(mortarRingGeo, new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 0.18, 0.08) }));
+    ring.rotation.x = Math.PI / 2; ring.scale.setScalar(r); g.add(ring);
+    const disc = new THREE.Mesh(mortarDiscGeo, new THREE.MeshBasicMaterial({ color: L(0xD93A12), transparent: true, opacity: 0.28, depthWrite: false }));
+    disc.rotation.x = -Math.PI / 2; disc.scale.setScalar(0.01); g.add(disc);
+    scene.add(g);
+    mortars.push({ x, z, t, T: t, dmg, r, g, disc });
+    if (net.mode === 'host') netAll({ t: 'mortar', x: r2(x), z: r2(z), d: r2(t), r });
+  }
+  function updateMortars(dt) {
+    for (let i = mortars.length - 1; i >= 0; i--) {
+      const m = mortars[i];
+      m.t -= dt;
+      m.disc.scale.setScalar(Math.max(0.01, m.r * (1 - m.t / m.T)));
+      if (m.t > 0) continue;
+      const p = new V3(m.x, m.g.position.y + 0.3, m.z);
+      boomFx(p);
+      if (net.mode !== 'client' && m.dmg) {
+        const was = CP;
+        for (const P of players) {
+          if (P.pl.down || P.pl.dead) continue;
+          const d = Math.hypot(P.pl.pos.x - m.x, P.pl.pos.z - m.z);
+          if (d < m.r && P.pl.pos.y - m.g.position.y < 2) { usePlayer(P); hurtPlayer(m.dmg * (1 - 0.5 * d / m.r), p); }
+        }
+        usePlayer(was);
+      }
+      scene.remove(m.g); mortars.splice(i, 1);
+    }
+  }
+  function bossMortar(e) {
+    const alive = players.filter((P) => !P.pl.down && !P.pl.dead);
+    if (!alive.length) return;
+    const n = e.hp / e.maxHp < 0.33 ? 4 : 3;
+    for (let i = 0; i < n; i++) {
+      const q = alive[i % alive.length].pl;
+      const lead = i === 0 ? 1 : rand(0.3, 1.3);
+      addMortar(q.pos.x + q.vel.x * lead + (i ? rand(-3, 3) : 0), q.pos.z + q.vel.z * lead + (i ? rand(-3, 3) : 0), 1.6 + i * 0.25, e.s.dmg * 2, 2.6);
+    }
+    sfx.windup(1);
+  }
+
+  // Tappe del robot d'oro: a ogni tappa superata il premio scende
+  let goldMarks = [], goldSig = '';
+  function syncGoldMarks(list, cpi) {
+    const sig = list ? cpi + ':' + list.map((c) => c.x.toFixed(1) + ',' + c.z.toFixed(1)).join(';') : '';
+    if (sig === goldSig) return;
+    goldSig = sig;
+    for (const m of goldMarks) scene.remove(m);
+    goldMarks = [];
+    if (!list) return;
+    for (let i = cpi; i < list.length; i++) {
+      const g = new THREE.Group();
+      g.position.set(list[i].x, groundAt(list[i].x, list[i].z, 5), list[i].z);
+      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: new THREE.Color(i === cpi ? 4 : 1.6, i === cpi ? 3 : 1.2, 0.3) }));
+      ring.rotation.x = Math.PI / 2; ring.position.y = 0.05; ring.scale.setScalar(i === cpi ? 1.4 : 0.9); g.add(ring);
+      const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: L(0xFFD447), transparent: true, opacity: i === cpi ? 0.3 : 0.1, depthWrite: false, fog: false }));
+      beam.scale.set(0.6, 0.8, 0.6); beam.position.y = 2.8; g.add(beam);
+      scene.add(g); goldMarks.push(g);
+    }
+  }
+  function goldRoute(x, z) {
+    const out = [];
+    let px = x, pz = z;
+    for (let i = 0; i < 4; i++) {
+      let best = null, bd = -1;
+      for (let k = 0; k < 12; k++) {
+        const c = randomSpot(), d = Math.hypot(c.x - px, c.z - pz);
+        const score = d > 14 && d < 30 ? 100 - Math.abs(d - 20) : d;
+        if (score > bd) { bd = score; best = c; }
+      }
+      out.push(best); px = best.x; pz = best.z;
+    }
+    return out;
+  }
+
   function resetExtras() {
     for (const p of pickups) scene.remove(p.g);
     pickups.length = 0;
     forPlayers(() => { Object.assign(eff, { pierce: 0, explo: 0, boots: 0 }); pl.maxHp = 100; pl.shield = 0; updateEffectsHud(); });
-    Object.assign(up, { dmg: 1, reload: 1, rate: 1, spread: 1, dur: 1, regen: 1, head: 0, level: {} });
+    Object.assign(up, { dmg: 1, reload: 1, rate: 1, spread: 1, dur: 1, regen: 1, head: 0, drum: 0, cold: 0, rico: 0, leech: 0, plate: 0, magnet: 0, level: {} });
     focus = 0; focusT = 0; stormT = 0; eventT = -1; goldenT = -1; pickupT = 8; bountyT = 0; bounty = null; upgradeChoices = null;
     canvas.style.filter = '';
     scene.fog.density = 0.0048;
@@ -2652,7 +3033,7 @@
       let taker = null;
       for (const P of players) {
         if (P.pl.down || P.pl.dead) continue;
-        if (Math.hypot(p.g.position.x - P.pl.pos.x, p.g.position.z - P.pl.pos.z) < 1.3 && Math.abs(p.g.position.y - P.pl.pos.y) < 1.6) { taker = P; break; }
+        if (Math.hypot(p.g.position.x - P.pl.pos.x, p.g.position.z - P.pl.pos.z) < 1.3 * (1 + up.magnet) && Math.abs(p.g.position.y - P.pl.pos.y) < 1.6) { taker = P; break; }
       }
       if (taker) { const was = CP; usePlayer(taker); applyPickup(p.type, p.g.position); usePlayer(was); scene.remove(p.g); pickups.splice(i, 1); continue; }
       if (p.life <= 0) { scene.remove(p.g); pickups.splice(i, 1); }
@@ -2684,7 +3065,7 @@
         const fwd = dx * -Math.sin(pl.yaw) + dz * -Math.cos(pl.yaw), rgt = dx * Math.cos(pl.yaw) + dz * -Math.sin(pl.yaw);
         gt.hidden = false;
         HU.goldArrow.style.transform = 'rotate(' + (Math.atan2(rgt, fwd) * 180 / Math.PI).toFixed(0) + 'deg)';
-        HU.goldInfo.textContent = 'Robot d\'oro ' + Math.round(Math.hypot(dx, dz)) + ' m, ' + Math.max(0, Math.ceil(22 - gd.life)) + ' s';
+        HU.goldInfo.textContent = 'Robot d\'oro ' + Math.round(Math.hypot(dx, dz)) + ' m, tappa ' + ((gd.cpi || 0) + 1) + ' di ' + (gd.cp ? gd.cp.length : 4);
       } else gt.hidden = true;
       if (hudTick) updateEffectsHud();
     });
@@ -2741,14 +3122,17 @@
       const p = b.m.position;
       let dead = b.life <= 0;
       // Colpo al giocatore (capsula verticale, controllo a metà e fine tratto)
-      for (const q of [prev.clone().lerp(p, 0.5), p]) {
+      const steps = Math.max(2, Math.ceil(b.v.length() * dt / 0.45));
+      let hitP = null;
+      for (let s = 1; s <= steps; s++) {
+        const q = prev.clone().lerp(p, s / steps);
         for (const P of players) {
           if (dead || P.pl.down || P.pl.dead) continue;
           const pp = P.pl.pos, py = clamp(q.y, pp.y + 0.2, pp.y + EYE);
           if (Math.hypot(q.x - pp.x, q.z - pp.z, q.y - py) < 0.45) {
             // Online il danno lo assegna solo l'host: sui client il proiettile è soltanto visivo
             if (net.mode !== 'client') { const was = CP; usePlayer(P); hurtPlayer(b.dmg, prev); usePlayer(was); }
-            dead = true;
+            dead = true; hitP = P;
           }
         }
       }
@@ -2756,7 +3140,22 @@
       if (!dead) for (const c of colliders) {
         if (p.x > c.minX && p.x < c.maxX && p.z > c.minZ && p.z < c.maxZ && p.y < c.top) { sparks(p, 5, 4); dead = true; break; }
       }
-      if (dead) { scene.remove(b.m); bolts.splice(i, 1); }
+      if (dead) {
+        if (b.splash) {
+          // Esplosione all'impatto: metà danno a chi è nel raggio e non è stato colpito in pieno
+          sparks(p, 12, 7); puff(p, L(0x4A3C30), 0.7, 0.9, 0.8, 3);
+          sfx.boom(clamp(0.5 - p.distanceTo(P0.pl.pos) / 80, 0.08, 0.5));
+          if (net.mode !== 'client') {
+            const was = CP;
+            for (const P of players) {
+              if (P === hitP || P.pl.down || P.pl.dead) continue;
+              if (Math.hypot(P.pl.pos.x - p.x, P.pl.pos.z - p.z, P.pl.pos.y + 0.9 - p.y) < b.splash) { usePlayer(P); hurtPlayer(b.dmg * 0.5, prev); }
+            }
+            usePlayer(was);
+          }
+        }
+        scene.remove(b.m); bolts.splice(i, 1);
+      }
     }
   }
 
@@ -3242,7 +3641,7 @@
   }
 
   // A terra, rialzo e Stelle dello sceriffo (vite di squadra per rientrare in gioco)
-  const DOWN_TIME = 30, MAX_LIVES = 5;
+  const DOWN_TIME = 30, MAX_LIVES = 3;
   let lives = 1;
   function updateLives() {
     for (const h of hudsNow()) { h.lives.textContent = '★ ' + lives; h.lives.title = 'Stelle dello sceriffo: vite di squadra'; }
@@ -3338,7 +3737,7 @@
     pl.health = Math.round(pl.maxHp * 0.6); pl.lastHurt = 0; pl.inv = 3; pl.vel.set(0, 0, 0);
     pl.pos.set(c.x, groundAt(c.x, c.z, 5), c.z);
     warp(CP);
-    G.rounds = 6; G.state = 'idle'; G.stage = '';
+    G.rounds = CAP(); G.state = 'idle'; G.stage = '';
     updateAmmo(); updateHealth();
     medal('Di nuovo in gioco: protetto per 3 s', 0);
     if (!CP.remote) sfx.bell();
@@ -3479,7 +3878,7 @@
 
   // ================= V07: cooperativa online da pari a pari (peer-to-peer) =================
   // Chi crea la stanza (host) esegue la simulazione; gli altri inviano i propri movimenti e colpi.
-  const NET_PREFIX = 'avamposto-cobra-v7-';
+  const NET_PREFIX = 'avamposto-cobra-v8-';
   const PEER_URL = 'https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js';
   // Facoltativo: server di rilancio aggiuntivi, es. { urls: 'turn:...', username: '...', credential: '...' }
   const TURN_SERVERS = [];
@@ -3487,7 +3886,7 @@
   const NAME_KEY = 'avamposto-cobra-name';
   const FOCUS_FILTER = 'saturate(0.35) contrast(1.15) brightness(1.05)';
   const TYPE_KEYS = Object.keys(TYPES), PICK_KEYS = Object.keys(PICK);
-  const PAD_BITS = [[32, 'L'], [64, 'R'], [128, 'CL'], [256, 'CR']];
+  const PAD_BITS = [[32, 'L'], [64, 'R'], [128, 'CL'], [256, 'CR'], [4096, 'S']];
   const STAT_KEYS = ['score', 'combo', 'kills', 'heads', 'shots', 'hits', 'maxCombo', 'bossKills', 'revives'];
   // Pulizia dei dati in arrivo dalla rete: mai fidarsi di numeri e testi ricevuti
   const fin = (v, d) => (typeof v === 'number' && isFinite(v) ? v : (d || 0));
@@ -3499,11 +3898,11 @@
 
   function netSend(c, m) { try { if (c && c.open) c.send(m); } catch (e) { /* collegamento chiuso */ } }
   function netAll(m, except) { for (const p of net.remotes) if (p.conn && p.conn !== except) netSend(p.conn, m); }
-  function upArr() { return [up.dmg, up.reload, up.rate, up.spread, up.dur, up.regen, up.head]; }
+  function upArr() { return [up.dmg, up.reload, up.rate, up.spread, up.dur, up.regen, up.head, up.drum]; }
   function applyUp(v) {
     if (!Array.isArray(v) || v.length < 7) return;
     up.dmg = clamp(fin(v[0], 1), 0.5, 20); up.reload = clamp(fin(v[1], 1), 0.02, 1); up.rate = clamp(fin(v[2], 1), 0.05, 1);
-    up.spread = clamp(fin(v[3], 1), 0.01, 1); up.dur = clamp(fin(v[4], 1), 1, 50); up.regen = clamp(fin(v[5], 1), 1, 50); up.head = clamp(fin(v[6]), 0, 1);
+    up.spread = clamp(fin(v[3], 1), 0.01, 1); up.dur = clamp(fin(v[4], 1), 1, 50); up.regen = clamp(fin(v[5], 1), 1, 50); up.head = clamp(fin(v[6]), 0, 1); up.drum = clamp(fin(v[7]) | 0, 0, 2);
   }
 
   // Giocatore remoto: stesso oggetto dei giocatori locali, ma senza arma né visuale e con un HUD nascosto
@@ -3668,13 +4067,15 @@
       if (e.T.boss) boss = e;
       const a = e.armor;
       const f = 1 | (e.los ? 2 : 0) | (e.hatOff ? 4 : 0) | (e.stun > 0 ? 8 : 0) | (e === bounty ? 16 : 0) | (a.L <= 0 ? 32 : 0) | (a.R <= 0 ? 64 : 0) |
-        (a.CL <= 0 ? 128 : 0) | (a.CR <= 0 ? 256 : 0) | (e.plateOpenT > 0 ? 512 : 0) | (e.flash > 0 ? 1024 : 0);
+        (a.CL <= 0 ? 128 : 0) | (a.CR <= 0 ? 256 : 0) | (e.plateOpenT > 0 ? 512 : 0) | (e.flash > 0 ? 1024 : 0) | (e.vet ? 2048 : 0) | (a.S <= 0 ? 4096 : 0);
       E.push([e.id, TYPE_KEYS.indexOf(e.type), r2(e.root.position.x), r2(e.T.fly ? e.body.position.y : e.root.position.y), r2(e.root.position.z), r3(e.yaw), f,
         e.windup > 0 ? r2(clamp(1 - e.windup / e.s.windup, 0.01, 1)) : 0, e.tgt ? e.tgt.slot | 0 : 0]);
     }
     let bm = 0;
     bottles.forEach((b, i) => { if (b.alive) bm |= 1 << i; });
+    const gd = enemies.find((e) => e.alive && e.T.golden && e.cp);
     return {
+      g: gd ? [gd.cpi].concat(...gd.cp.map((c) => [r1(c.x), r1(c.z)])) : 0,
       t: 'snap', w: wave, r: hostileAlive() + spawnQueue.filter((t) => t !== 'golden').length, l: lives, f: Math.round(focus), ft: r2(Math.max(0, focusT)),
       st: r1(Math.max(0, stormT)), bt: r1(Math.max(0, bountyT)), bf: boss ? r3(Math.max(0, boss.hp / boss.maxHp)) : -1, bm,
       p: P, e: E, k: pickups.map((k) => [k.id, PICK_KEYS.indexOf(k.type), r2(k.g.position.x), r2(k.g.position.z), r1(k.life)])
@@ -3732,7 +4133,7 @@
         const v = v3(m.v), sp = v.length();
         if (sp < 0.1 || bolts.length > 80) break;
         const p = v3(m.p);
-        spawnBolt(p, v.multiplyScalar(1 / sp), clamp(sp, 1, 60), 0, clamp(fin(m.s, 1), 0.5, 3));
+        spawnBolt(p, v.multiplyScalar(1 / sp), clamp(sp, 1, 90), 0, clamp(fin(m.s, 1), 0.5, 3), clamp(fin(m.x), 0, 4), clamp(fin(m.l, 4), 0.02, 4));
         if (clockT - zapAt > 0.06) { zapAt = clockT; sfx.zap(clamp(1 - p.distanceTo(pl.pos) / 60, 0.15, 1)); }
         break;
       }
@@ -3755,6 +4156,8 @@
       case 'hm': hitmark(cleanCls(m.k)); break;
       case 'hurt': hurtFx({ x: fin(m.f && m.f[0]), z: fin(m.f && m.f[1]) }); break;
       case 'loader': giveLoader(); break;
+      case 'round': giveRound(); break;
+      case 'mortar': if (mortars.length < 24) addMortar(clamp(fin(m.x), -60, 60), clamp(fin(m.z), -60, 60), clamp(fin(m.d, 1.6), 0.2, 5), 0, clamp(fin(m.r, 2.6), 0.5, 6)); break;
       case 'toast': toast(cleanText(m.m), clamp(fin(m.ms, 1800), 500, 6000)); break;
       case 'banner': {
         // Solo testo e, al più, una riga secondaria: nessun altro codice HTML viene accettato
@@ -3833,7 +4236,7 @@
           P0.tp = a[16] | 0;
           q.pos.set(x, y, z); q.vel.set(0, 0, 0);
         }
-        if (wasDead && !q.dead) { G.rounds = 6; G.state = 'idle'; G.stage = ''; updateAmmo(); sfx.bell(); }
+        if (wasDead && !q.dead) { G.rounds = CAP(); G.state = 'idle'; G.stage = ''; updateAmmo(); sfx.bell(); }
         if ((q.down && !wasDown) || (q.dead && !wasDead)) {
           inp.adsToggle = false; inp.adsHeld = false; G.state = 'idle'; G.stage = '';
           $('aimBtn').classList.remove('on');
@@ -3868,6 +4271,7 @@
         e.net = { x, y, z, yaw: fin(a[5]), los: !!(f & 2), stun: !!(f & 8), flash: !!(f & 1024), wind, tgt: a[8] | 0, open: !!(f & 512) };
         const back = new V3(-Math.sin(e.yaw), 0, -Math.cos(e.yaw));
         if ((f & 4) && !e.hatOff && e.hat) knockHat(e, back);
+        if ((f & 2048) && !e.vetMark) addVetMark(e);
         for (const [bit, k] of PAD_BITS) {
           if (!(f & bit)) continue;
           const part = e.parts.find((o) => o.userData.pad === k && o.userData.active !== false);
@@ -3895,6 +4299,16 @@
       for (let i = pickups.length - 1; i >= 0; i--) if (!ids.has(pickups[i].id)) { scene.remove(pickups[i].g); pickups.splice(i, 1); }
     }
 
+    // Tappe del robot d'oro
+    if (Array.isArray(m.g) && m.g.length >= 3) {
+      const cp = [];
+      for (let i = 1; i + 1 < m.g.length && cp.length < 6; i += 2) cp.push({ x: fin(m.g[i]), z: fin(m.g[i + 1]) });
+      const ci = clamp(fin(m.g[0]) | 0, 0, cp.length);
+      syncGoldMarks(cp, ci);
+      const ge = enemies.find((o) => o.alive && o.T.golden);
+      if (ge) { ge.cp = cp; ge.cpi = ci; }
+    } else syncGoldMarks(null);
+
     // Bottiglie rotte da altri giocatori
     const bm = fin(m.bm) | 0;
     bottles.forEach((b, i) => { if (b.alive && !(bm >> i & 1)) bottleVisual(b, b.g.position.clone().add(new V3(0, 0.15, 0))); });
@@ -3916,25 +4330,30 @@
     const n = e.net;
     if (!n) return true;
     e.life += dt;
-    const pos = e.root.position, k = damp(12, dt), ox = pos.x, oz = pos.z;
+    const pos = e.root.position, k = damp(12, dt);
+    if (Math.hypot(n.x - pos.x, n.z - pos.z) > 6) { pos.x = n.x; pos.z = n.z; if (!e.T.fly) pos.y = n.y; } // cambio di posto (Cecchino)
+    const ox = pos.x, oz = pos.z;
     pos.x += (n.x - pos.x) * k; pos.z += (n.z - pos.z) * k;
     e.yaw += angDiff(n.yaw, e.yaw) * k;
     e.root.rotation.y = e.yaw;
     const spd = Math.hypot(pos.x - ox, pos.z - oz) / Math.max(dt, 1e-4);
     e.los = n.los; e.stun = n.stun ? 0.3 : 0;
     e.mats.mBody.emissive.setScalar(n.flash ? 0.5 : 0);
+    const tg = players.find((o) => o.slot === n.tgt) || P0;
+    const dist = Math.hypot(tg.pl.pos.x - pos.x, tg.pl.pos.z - pos.z) || 0.001;
     if (e.T.fly) {
       e.body.position.y += (n.y - e.body.position.y) * k;
       e.body.rotation.x = clamp(spd / 10, 0, 0.3);
       for (const r of e.rotors) r.rotation.y += dt * 40;
     } else {
       pos.y += (n.y - pos.y) * k;
-      const tg = players.find((o) => o.slot === n.tgt) || P0;
       usePlayer(tg);
-      animateHumanoid(e, dt, spd > 0.3 ? spd : 0, Math.hypot(tg.pl.pos.x - pos.x, tg.pl.pos.z - pos.z) || 0.001);
+      animateHumanoid(e, dt, spd > 0.3 ? spd : 0, dist);
       usePlayer(P0);
     }
-    if (e.T.golden) return true;
+    if (e.T.kami) { kamiBlink(e, dist, dt); return true; }
+    if (e.shieldG) e.shieldG.rotation.y = lerp(e.shieldG.rotation.y, (n.wind > 0 || n.open) ? 1.35 : 0, damp(10, dt));
+    if (e.T.sniper) setLaser(e, n.wind > 0 ? new V3(tg.pl.pos.x, tg.pl.pos.y + 1.2, tg.pl.pos.z) : null);
     if (n.wind > 0) {
       e.mats.mEye.emissiveIntensity = 3 + n.wind * 9;
       e.muzzle.scale.setScalar(1 + n.wind * 0.8);
@@ -3958,6 +4377,7 @@
     }
     usePlayer(P0);
     updateBolts(dt * es);
+    updateMortars(dt * es);
     // Oggetti, effetti e segnali: solo la parte visiva, i tempi veri li tiene l'host
     for (const k of pickups) {
       k.life -= dt; k.t += dt;
@@ -4213,8 +4633,11 @@
   }
 
   function clearWorld() {
-    for (const e of enemies) scene.remove(e.root);
+    for (const e of enemies) { dropLaser(e); scene.remove(e.root); }
     enemies.length = 0;
+    for (const m of mortars) scene.remove(m.g);
+    mortars.length = 0;
+    syncGoldMarks(null);
     for (const b of bolts) scene.remove(b.m); bolts.length = 0;
     for (const f of fx) scene.remove(f.m); fx.length = 0;
     for (const c of casings) scene.remove(c.m); casings.length = 0;
@@ -4459,6 +4882,7 @@
     }
     usePlayer(P0);
     updateBolts(dt * es);
+    updateMortars(dt * es);
     updateExtras(dt);
     if (state === 'play') updateWaves(dt);
     for (const p of players) {
@@ -4521,6 +4945,7 @@
     get assistFriction() { return P0.inp.assistF; }, renderer, camera, spawnPickup, pickups, eff, up, triggerEvent, offerUpgrades,
     chooseUpgrade, activateFocus, get focusT() { return focusT; }, setFocus: (v) => { focus = v; }, spawn: (t) => spawnAt(t), TYPES, bottles,
     sim: (sec) => { for (let t = 0; t < sec && state === 'play'; t += 1 / 60) { clockT += 1 / 60; usePlayer(P0); if (net.mode === 'client') simulateClient(1 / 60); else simulate(1 / 60); updateFx(1 / 60); } scene.updateMatrixWorld(); },
+    get lastShot() { return lastShot; }, mortars, roofSpots, addMortar, CAP, setWave: (w) => { wave = w; }, pickType, typeStats, UPG, goldState: () => goldMarks.length,
     net, netCreate, netJoin, netLeave, netSnapshot, toMenu, pause, resume, get menuOpen() { return menuOpen; }, bolts, hostileAlive, get clockT() { return clockT; },
     get state() { return state; }, enemies, stats, G, pl, get wave() { return wave; }, fire: () => { P0.inp.fire = true; },
     start: (o) => startGame(o), reload: startReload, dragMode: () => { dragLook = true; }
