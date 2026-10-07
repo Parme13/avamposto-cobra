@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Avamposto Cobra V08</title>
+<title>Avamposto Cobra V09</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Rye&display=swap" rel="stylesheet">
@@ -93,6 +93,7 @@
   [data-id=cross] .l,[data-id=cross] .r{height:2px;width:9px;top:-1px}
   [data-id=cross] .dot{width:4px;height:4px;left:-2px;top:-2px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.8)!important}
   [data-id=cross].ads i:not(.dot){opacity:0}
+  [data-id=cross].lock i{background:#FF5A3A}
   [data-id=hitmark]{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;opacity:0}
   [data-id=hitmark]::before,[data-id=hitmark]::after{content:"";position:absolute;left:12px;top:0;width:2px;height:26px;background:#fff;box-shadow:0 0 2px #000}
   [data-id=hitmark]::before{transform:rotate(45deg)}
@@ -338,7 +339,7 @@
       <kbd>Esc</kbd><span>Pausa</span>
       <kbd>Controller</kbd><span>Stick per muoverti e mirare, RT fuoco, LT mira di precisione, A salto, X ricarica, Y mira concentrata, Start pausa</span>
     </div>
-    <p class="muted touch-only">Tocca e trascina nella metà sinistra per muoverti (spingi al massimo in avanti per correre). Trascina a destra per mirare: anche il tasto Fuoco si può trascinare mentre spari. Il tasto Mira aggancia il robot più vicino al mirino.</p>
+    <p class="muted touch-only">Tocca e trascina nella metà sinistra per muoverti (spingi al massimo in avanti per correre). Trascina a destra per mirare: anche il tasto Fuoco si può trascinare mentre spari. Il tasto Mira aggancia il robot più vicino al mirino. Con il Fuoco automatico (nelle Impostazioni, attivo all'inizio) il revolver spara da solo quando il mirino diventa rosso su un robot: non serve staccare il dito dalla mira.</p>
     <p class="muted rot-hint">Ruota il telefono in orizzontale per giocare.</p>
     <table class="zones">
       <thead><tr><th>Zona colpita</th><th>Danno</th></tr></thead>
@@ -358,7 +359,7 @@
     <p class="muted">Bonus: robot d'oro (segue un percorso a 4 tappe dorate: prima lo abbatti, più ricco è il premio), taglie, bottiglie, cappelli, rotolacampo (i cespugli secchi che rotolano), doppiette e combo. Colpi in testa e al nucleo caricano la Mira concentrata: tasto F rallenta il tempo. Quando l'occhio di un robot si illumina, sta per sparare.</p>
       <p class="muted">In 2 giocatori arrivano più robot e lo Sceriffo è più resistente. Se un compagno va a terra hai 30 secondi per raggiungerlo: restagli vicino 3 secondi per rialzarlo.</p>
       <p class="muted">Stelle dello sceriffo (★ sotto i punti): vite di squadra. Si parte con 1 Stella da soli, 2 in coppia e 3 in tre o quattro, e non se ne possono avere più di 3; se ne guadagna una abbattendo lo Sceriffo di Ferro o raccogliendo la stella dorata (dall'ondata 3). Quando cadi da solo, o resti a terra troppo a lungo, una Stella ti fa rientrare dopo pochi secondi in un punto sicuro, protetto per 3 secondi. Senza Stelle: da soli la partita finisce, in squadra rientri alla fine dell'ondata.</p>
-      <p class="muted">Online: un giocatore crea la stanza e passa il codice (o il link di invito) ai compagni, che lo scrivono e premono Entra. La partita la avvia chi ha creato la stanza e il suo dispositivo fa da arbitro: se chiude il gioco, la partita finisce per tutti. Online il menu di pausa non ferma l'azione e il potenziamento di fine ondata lo sceglie chi ha creato la stanza.</p>
+      <p class="muted">Online: un giocatore crea la stanza e passa il codice (o il link di invito) ai compagni, che lo scrivono e premono Unisciti (o il tasto grande, che con un codice scritto diventa «Unisciti alla stanza»). La partita la avvia chi ha creato la stanza e il suo dispositivo fa da arbitro: se chiude il gioco, la partita finisce per tutti. Online il menu di pausa non ferma l'azione e il potenziamento di fine ondata lo sceglie chi ha creato la stanza.</p>
     </details>
     <p class="muted" id="bestLine" hidden></p>
     <details class="set" id="settingsBox">
@@ -376,6 +377,7 @@
       <label class="chk"><input type="checkbox" id="fpsChk"> Mostra FPS</label>
       <label class="chk"><input type="checkbox" id="assistChk"> Assistenza alla mira (touch e controller)</label>
       <label class="chk touch-flex"><input type="checkbox" id="vibChk"> Vibrazione</label>
+      <label class="chk touch-flex"><input type="checkbox" id="autoChk"> Fuoco automatico quando il mirino è su un robot</label>
     </details>
     <div class="row" id="startActions">
       <button class="btn" id="startBtn">Entra nell'avamposto</button>
@@ -388,7 +390,7 @@
       <div class="row" id="netIdle">
         <button class="btn ghost" id="netCreate">Crea stanza</button>
         <input id="netCode" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Codice" aria-label="Codice della stanza">
-        <button class="btn ghost" id="netJoin">Entra</button>
+        <button class="btn ghost" id="netJoin">Unisciti</button>
       </div>
       <div id="netRoom" hidden>
         <p class="muted" style="margin:0 0 6px">Codice della stanza: <b id="netCodeLbl"></b></p>
@@ -397,7 +399,7 @@
       </div>
       <p class="muted" id="netMsg" aria-live="polite"></p>
     </div>
-    <p class="ver">Versione V08</p>
+    <p class="ver">Versione V09</p>
   </div>
 </div>
 
@@ -1146,7 +1148,7 @@
   }
 
   // ================= V04: impostazioni e qualità grafica =================
-  const settings = { quality: 'auto', fps: false, assist: true, vib: true };
+  const settings = { quality: 'auto', fps: false, assist: true, vib: true, autofire: true };
   try { Object.assign(settings, JSON.parse(localStorage.getItem('avamposto-cobra-settings')) || {}); } catch (e) { /* impostazioni predefinite */ }
   function saveSettings() { try { localStorage.setItem('avamposto-cobra-settings', JSON.stringify(settings)); } catch (e) { /* archiviazione non disponibile */ } }
 
@@ -1215,6 +1217,7 @@
     bindChk('fpsChk', 'fps', () => { fpsBox.hidden = !settings.fps; });
     bindChk('assistChk', 'assist');
     bindChk('vibChk', 'vib');
+    bindChk('autoChk', 'autofire');
   }
   function buzz(ms) {
     if (!settings.vib || !navigator.vibrate || !document.body.classList.contains('touch')) return;
@@ -3246,6 +3249,26 @@
     }
   }
 
+  // V09: fuoco automatico su touch. Se il mirino resta su un robot per un attimo, il colpo parte da solo:
+  // così non serve staccare il dito dalla mira per premere Fuoco.
+  const autoRay = new THREE.Raycaster();
+  function updateAutoFire(dt) {
+    const on = CP.idx === 0 && settings.autofire && document.body.classList.contains('touch') && !pl.down && !pl.dead && !menuOpen;
+    if (!on) { if (CP.autoLock) { CP.autoLock = false; HU.cross.classList.remove('lock'); } CP.autoT = 0; return; }
+    CP.autoTick = (CP.autoTick || 0) + dt;
+    if (CP.autoTick < 0.033) return; // controllo circa 30 volte al secondo
+    const step = CP.autoTick; CP.autoTick = 0;
+    const p = clamp(pl.pitch + G.kick, -1.5, 1.5), cp = Math.cos(p);
+    autoRay.set(new V3(pl.pos.x, pl.pos.y + EYE, pl.pos.z), new V3(-Math.sin(pl.yaw) * cp, Math.sin(p), -Math.cos(pl.yaw) * cp));
+    autoRay.far = 70;
+    const hit = autoRay.intersectObjects(shootables, false)[0];
+    const ud = hit && hit.object.userData;
+    const lock = !!(ud && ud.enemy && ud.enemy.alive && ud.zone !== 'hat');
+    if (lock !== !!CP.autoLock) { CP.autoLock = lock; HU.cross.classList.toggle('lock', lock); }
+    CP.autoT = lock ? (CP.autoT || 0) + step : 0;
+    if (lock && CP.autoT >= 0.1 && G.state !== 'reload' && G.rounds > 0) inp.fire = true;
+  }
+
   // ================= V04: record =================
   const REC_KEY = 'avamposto-cobra-records-v1';
   let storageOK = true;
@@ -3777,6 +3800,12 @@
   function padsConnected() {
     try { return Array.from(navigator.getGamepads ? navigator.getGamepads() : []).filter(Boolean); } catch (e) { return []; }
   }
+  // Codice stanza scritto e valido (5 caratteri), se non si è già in una stanza
+  function joinCode() {
+    if (net.mode) return '';
+    const c = String($('netCode').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return c.length === 5 ? c : '';
+  }
   function renderLobby() {
     const m = $('lobbyMsg'), b = $('startBtn');
     b.disabled = net.mode === 'client';
@@ -3787,7 +3816,14 @@
     }
     if (net.mode === 'client') {
       m.textContent = 'Sei ospite di una stanza online: lo schermo diviso è disattivato.';
-      b.textContent = 'In attesa di chi ha creato la stanza';
+      b.textContent = 'Sei nella stanza: attendi l\'avvio';
+      return;
+    }
+    const jc = joinCode();
+    if (jc) {
+      // Codice scritto ma non ancora nella stanza: il tasto grande fa entrare nella stanza, non avvia una partita da soli
+      m.textContent = 'Hai scritto un codice stanza: per giocare da solo cancellalo.';
+      b.textContent = net.busy ? 'Collegamento alla stanza ' + jc + '...' : 'Unisciti alla stanza ' + jc;
       return;
     }
     if (lobby.p2Pad !== null) {
@@ -3825,7 +3861,7 @@
         if ($('startScreen').hidden || isTouch) continue;
         if (edge(0) && lobby.p2Pad === null) { lobby.p2Pad = gp.index; renderLobby(); }
         else if (edge(1) && lobby.p2Pad === gp.index) { lobby.p2Pad = null; renderLobby(); }
-        else if (edge(9)) startGame({ fromPad: true, pad0: lobby.p2Pad === gp.index ? null : gp.index });
+        else if (edge(9)) { if (joinCode()) netJoin(); else startGame({ fromPad: true, pad0: lobby.p2Pad === gp.index ? null : gp.index }); }
         continue;
       }
       if (state === 'pause') { if (edge(9) || edge(0)) resume(true); continue; }
@@ -4369,6 +4405,7 @@
     const es = focusT > 0 ? 0.35 : 1;
     usePlayer(P0);
     updateAimAssist(dt);
+    updateAutoFire(dt);
     const mv = updatePlayer(dt);
     updateGun(dt, mv.moving, mv.sprint);
     for (const p of players) if (p.remote) smoothRemote(p, dt);
@@ -4447,7 +4484,12 @@
     if (window.__peerOpts) Object.assign(o, window.__peerOpts); // usato solo dalle prove automatiche
     return o;
   }
-  function netMsg(t, bad) { const el = $('netMsg'); el.textContent = t || ''; el.classList.toggle('bad', !!bad); }
+  function netMsg(t, bad) {
+    const el = $('netMsg');
+    el.textContent = t || ''; el.classList.toggle('bad', !!bad);
+    // Gli errori devono essere visibili anche sui telefoni, dove il riquadro può restare fuori schermo
+    if (bad && t && state === 'menu') { try { el.scrollIntoView({ block: 'center' }); } catch (e) { /* ignora */ } }
+  }
   function netErrText(ty) {
     if (ty === 'peer-unavailable') return 'Stanza non trovata: controlla il codice e che chi l\'ha creata abbia ancora il gioco aperto.';
     if (ty === 'browser-incompatible') return 'Questo browser non supporta il collegamento diretto tra giocatori (WebRTC).';
@@ -4527,7 +4569,7 @@
           if (net.peer !== pe) return;
           clearTimeout(timer);
           net.busy = false; net.mode = 'client'; net.host = c; net.code = code;
-          netMsg('Sei nella stanza: la partita la avvia chi l\'ha creata.');
+          netMsg('Sei nella stanza ' + code + '. Resta su questa schermata: la partita parte quando chi ha creato la stanza preme Avvia.');
           renderNet();
         });
         c.on('data', (m) => {
@@ -4603,6 +4645,12 @@
   $('netCreate').addEventListener('click', netCreate);
   $('netJoin').addEventListener('click', netJoin);
   $('netCode').addEventListener('keydown', (e) => { if (e.key === 'Enter') netJoin(); });
+  $('netCode').addEventListener('input', () => { if (!net.mode && !net.busy) netMsg(joinCode() ? 'Premi Unisciti per entrare nella stanza.' : ''); renderLobby(); });
+  // Tornando in primo piano (telefono sbloccato, ritorno da un'altra app) si ripristina il collegamento al server delle stanze
+  document.addEventListener('visibilitychange', () => {
+    const pe = net.peer;
+    if (!document.hidden && pe && pe.disconnected && !pe.destroyed) { try { pe.reconnect(); } catch (e) { /* ignora */ } }
+  });
   $('netLeave').addEventListener('click', netLeave);
   $('leaveBtn').addEventListener('click', netLeave);
   $('leaveBtn2').addEventListener('click', netLeave);
@@ -4614,7 +4662,7 @@
   try { $('netName').value = cleanName(localStorage.getItem(NAME_KEY) || ''); } catch (e) { /* ignora */ }
   {
     const q = /[?&]stanza=([A-Za-z0-9]{5})(?:&|$)/.exec(location.search || '');
-    if (q) { $('netCode').value = q[1].toUpperCase(); netMsg('Invito ricevuto: scrivi il tuo nome e premi Entra.'); }
+    if (q) { $('netCode').value = q[1].toUpperCase(); netMsg('Invito ricevuto: scrivi il tuo nome e premi «Unisciti alla stanza».'); }
   }
   // Chiusura della pagina: i compagni vengono avvisati subito
   window.addEventListener('pagehide', () => { try { if (net.peer) net.peer.destroy(); } catch (e) { /* ignora */ } });
@@ -4742,7 +4790,7 @@
     $('waves').style.display = muted ? 'none' : '';
     $('muteBtn').setAttribute('aria-label', muted ? 'Attiva audio' : 'Disattiva audio');
   }
-  $('startBtn').addEventListener('click', () => startGame());
+  $('startBtn').addEventListener('click', () => { if (joinCode()) netJoin(); else startGame(); });
   $('againBtn').addEventListener('click', () => startGame({ pad0: P0.padIndex }));
   $('restartBtn').addEventListener('click', () => startGame({ pad0: P0.padIndex }));
   $('resumeBtn').addEventListener('click', () => resume());
@@ -4872,6 +4920,7 @@
       if (p.remote) { updateRemoteHost(p, dt); continue; }
       usePlayer(p);
       updateAimAssist(dt);
+      updateAutoFire(dt);
       const mv = updatePlayer(dt);
       updateGun(dt, mv.moving, mv.sprint);
       updateDowned(dt);
